@@ -1,0 +1,72 @@
+{
+  "env": {
+    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "45",
+    "ANTHROPIC_BASE_URL": "http://localhost:1234",
+    "ANTHROPIC_AUTH_TOKEN": "lmstudio",
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "API_TIMEOUT_MS": "1800000",
+    "BASH_DEFAULT_TIMEOUT_MS": "1800000",
+    "BASH_MAX_TIMEOUT_MS": "1800000",
+    "API_FORCE_IDLE_TIMEOUT": "0",
+    "CLAUDE_ENABLE_STREAM_WATCHDOG": "0",
+    "CLAUDE_ENABLE_BYTE_WATCHDOG": "0",
+    "CLAUDE_STREAM_IDLE_TIMEOUT_MS": "1800000"
+  },
+  "model": "qwen3.5-4b",
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay ~/.claude/Sounds/Glass.aiff; say -v Stephanie 'Claude has stopped.'"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "AskUserQuestion",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay ~/.claude/Sounds/Pop.aiff; say 'Claude has a question for you.'"
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay ~/.claude/Sounds/Pop.aiff; say -v Stephanie 'Claude is requesting permission to use a tool.'"
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "jq -r '\"[\\(.model.display_name)] \\(.context_window.used_percentage // 0)% context\"' "
+  },
+  "enabledPlugins": {
+    "vercel@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "claude-plugins-official": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
+      }
+    }
+  },
+  "effortLevel": "high",
+  "theme": "auto",
+  "api": {
+    "timeoutMs": 1800000
+  },
+  "autoCheckPointCommits": false
+}

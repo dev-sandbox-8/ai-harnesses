@@ -1,0 +1,26 @@
+# Plugins and tools
+mcp-needs-auth-cache.json
+plugins
+
+# Temp files
+.last-cleanup
+.last-update-result.json
+cache/
+
+# Backups
+backups/
+
+# Misc
+daemon/
+
+# History and sessions
+daemon.log
+file-history/
+history.jsonl
+jobs/
+projects/
+session-env/
+sessions/
+shell-snapshots/
+tasks
+teams
