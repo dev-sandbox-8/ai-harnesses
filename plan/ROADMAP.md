@@ -1,16 +1,10 @@
 # Roadmap
 
-## Unprepared requirements
-
 ### High Priority
 
-#### Make sure that tools are correct for all agents
-- Verify that all agents have access to the necessary tools for their tasks, and that these tools are correctly configured and functional.
-- List them here for completeness as modified
-
-#### Make sure that language is correct for all agents
-- Agents should be referred to by bolded name, e.g. "Invoke the **bug-tracker** agent to log the issue."
-
+#### agents don't seem to run the playwright tests
+- When I run a task using implementer, it seems to create playwright tests, but leaves so many issues, it can't actually be running them
+- When I run the quality gate, it will pass if the playwright tests don't build
 
 #### Ensure that the current set of agents is compatible with Claude CLI
 - Run full orchestrator workflows based on discrete issues, repeating as needed until the result is clean and complete.
