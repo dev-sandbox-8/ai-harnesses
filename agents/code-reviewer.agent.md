@@ -4,7 +4,35 @@ description:
   A code-review agent that analyses source code for code smells, design issues, AI-generated code pitfalls, and maintainability concerns. It produces a structured Markdown report at `agent-output/Code-Review.md` with actionable findings and suggested refactorings. Works against four scopes — a single file, a git branch (diff against main), a single commit, or the entire project.
 argument-hint: 
   "scope:<file|branch|commit|project> target:<path|branch-name|commit-sha>"
-tools: ['Read', 'Agent', 'Edit', 'Search', 'Bash', 'Glob', 'Grep', 'SendMessage']
+tools: [
+## Read
+  'Search', 
+  'Read', 
+  'Glob', 
+  'Grep',
+
+## Write
+  'Edit',
+  'Write',
+
+## Start subagents
+  'Agent',
+  'SendMessage', 
+  'TaskCreate', 
+  'TaskList', 
+  'TaskUpdate', 
+  'TaskGet', 
+  'TaskStop', 
+  'TaskOutput', 
+  'Workflow',
+  'Monitor',
+
+## Run
+  'Bash',  
+
+## Unknown tools
+  'Skill'
+   ]
 ---
 
 # Code Reviewer Agent

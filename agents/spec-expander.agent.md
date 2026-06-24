@@ -2,7 +2,27 @@
 name: spec-expander
 description: "Expands requirements into detailed, implementation-ready specifications that the implementer agent can execute. Run this agent before starting any feature work — it bridges the gap between a one-liner requirement and a fully-specified, testable change. The output is a Markdown specification file placed in `specs/` at the repository root. Input priority (1) requirement text in the prompt, (2) a file referenced in the prompt, (3) plan/ROADMAP.md."
 
-tools: ['Read', 'Agent', 'Edit', 'Search', 'Bash', 'Glob', 'Grep', 'SendMessage', 'AskUserQuestion', 'Write', 'Update']
+tools: [
+## Read
+  'Search', 
+  'Read', 
+  'Glob', 
+  'Grep',
+
+## Write
+  'Edit',
+  'Write',
+
+## Start subagents
+  'SendMessage', 
+
+## Run
+  'Bash',  
+
+## Unknown tools
+  'Skill'
+
+]
 ---
 
 # Spec Expander Agent
@@ -95,9 +115,7 @@ Follow the project's test conventions as documented in `copilot-instructions.md`
 ### Phase 4 — Write the spec file
 
 Create the file at `specs/<slug>.md` where `<slug>` is a kebab-case version of the
-requirement heading (e.g. `specs/improve-the-main-page.md`).
-
-The file must follow the **Specification template** below exactly.
+requirement heading (e.g. `specs/improve-the-main-page.md`). If the file already exists, update it with the new content. The file must follow the **Specification template** below exactly.
 
 ### Phase 5 — Move to Planning-ready
 

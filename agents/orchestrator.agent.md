@@ -4,7 +4,31 @@ description:
   Thin intent router that parses the user's request and delegates to the correct workflow agent. Does not contain workflow logic itself — it dispatches to feature-delivery, refactor, or release-manager and relays the result.
 argument-hint: 
   Any request. The orchestrator determines which workflow to invoke based on trigger words and context. Pass scope/target/focus parameters for analysis workflows.
-tools: ['Read', 'Agent', 'Edit', 'Search', 'Bash', 'Glob', 'Grep', 'SendMessage', 'TaskCreate', 'TaskList', 'TaskUpdate', 'TaskGet', 'TaskStop', 'TaskOutput' ]
+tools: [
+## Read
+  'Search', 
+  'Read', 
+  'Glob', 
+  'Grep',
+## Write
+  'Edit',
+  'Write',
+## Start subagents
+  'Agent',
+  'SendMessage', 
+  'TaskCreate', 
+  'TaskList', 
+  'TaskUpdate', 
+  'TaskGet', 
+  'TaskStop', 
+  'TaskOutput', 
+  'Workflow',
+  'SendMessage', 
+## Run
+  'Bash',  
+## Unknown tools
+  'Skill'
+  ]
 ---
 
 # Orchestrator Agent
@@ -67,12 +91,12 @@ Parse the user's prompt and select the workflow agent:
 
 **Routing priority:** bug-fix triggers take precedence over feature-delivery. If both a
 bug-fix trigger and a feature trigger are present (e.g. "fix the broken login and add
-rate limiting"), route the fix to **bug-fix** first, then invoke **feature-delivery**
-for the new feature.
+rate limiting"), route the fix to **bug-fix** agent first, then invoke **feature-delivery**
+agent for the new feature.
 
 If both analysis and feature triggers are present (e.g. "review and then implement the
-dark-mode toggle"), invoke **refactor** first scoped to the relevant area, then invoke
-**feature-delivery** with the requirement text.
+dark-mode toggle"), invoke **refactor** agent first scoped to the relevant area, then invoke
+**feature-delivery** agent with the requirement text.
 
 ---
 
@@ -80,10 +104,10 @@ dark-mode toggle"), invoke **refactor** first scoped to the relevant area, then 
 
 When the user includes scope parameters, pass them through verbatim to the workflow agent:
 
-- `scope:<file|branch|commit|project>` → relayed to **refactor**
-- `target:<path|branch-name|commit-sha>` → relayed to **refactor**
-- `focus:<area>` → relayed to **refactor**
-- `report-only` / `audit-only` → relayed to **refactor** (suppresses auto-fix)
+- `scope:<file|branch|commit|project>` → relayed to **refactor** agent
+- `target:<path|branch-name|commit-sha>` → relayed to **refactor** agent
+- `focus:<area>` → relayed to **refactor** agent
+- `report-only` / `audit-only` → relayed to **refactor** agent (suppresses auto-fix)
 
 ---
 

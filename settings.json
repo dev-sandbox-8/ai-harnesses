@@ -20,7 +20,18 @@
         "hooks": [
           {
             "type": "command",
-            "command": "afplay ~/.claude/Sounds/Glass.aiff; say -v Stephanie 'Claude has stopped.'"
+            "command": "afplay ~/.claude/Sounds/Glass.aiff; say -v Stephanie 'Claude has completed work.'; ~/.claude/scripts/discord-notify.sh 'Im done.'"
+          }
+        ]
+      }
+    ],
+    "StopFailure": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay ~/.claude/Sounds/Glass.aiff; say -v Stephanie 'Claude has stopped due to an error.'; ~/.claude/scripts/discord-notify.sh 'Ive stopped due to an error.'"
           }
         ]
       }
@@ -31,7 +42,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "afplay ~/.claude/Sounds/Pop.aiff; say 'Claude has a question for you.'"
+            "command": "afplay ~/.claude/Sounds/Pop.aiff; say -v Stephanie 'Claude has a question for you.'; ~/.claude/scripts/discord-notify.sh 'I have a question for you.'"
           }
         ]
       }
@@ -42,7 +53,29 @@
         "hooks": [
           {
             "type": "command",
-            "command": "afplay ~/.claude/Sounds/Pop.aiff; say -v Stephanie 'Claude is requesting permission to use a tool.'"
+            "command": "afplay ~/.claude/Sounds/Pop.aiff; say -v Stephanie 'Claude is requesting permission to use a tool.'; ~/.claude/scripts/discord-notify.sh 'I need permission to use a tool.'"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay ~/.claude/Sounds/Pop.aiff; say -v Stephanie 'Claude is notifying.'; ~/.claude/scripts/discord-notify.sh 'Claude is notifying.'"
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay ~/.claude/Sounds/Basso.aiff; say -v Stephanie 'Claude failed to use a tool.'; ~/.claude/scripts/discord-notify.sh 'I failed to use a tool.'"
           }
         ]
       }
@@ -63,7 +96,7 @@
       }
     }
   },
-  "effortLevel": "high",
+  "effortLevel": "medium",
   "theme": "auto",
   "api": {
     "timeoutMs": 1800000

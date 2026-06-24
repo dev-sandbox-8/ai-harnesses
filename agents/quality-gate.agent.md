@@ -4,7 +4,35 @@ description:
   Tier 3 specialist that runs the full CI suite (unit tests, lint, E2E) and enforces green gates. When a gate fails, it automatically invokes the implementer agent to fix the issue, then re-runs the suite — creating a self-healing feedback loop. Returns either "all green" or "blocked after N retries" with full diagnostic output.
 argument-hint: 
   No arguments required. Optionally pass "unit-only", "lint-only", or "e2e-only" to run a single gate. Omit to run all gates in sequence.
-tools: ['Read', 'Agent', 'Edit', 'Search', 'Bash', 'Glob', 'Grep', 'SendMessage']
+tools: [
+   ## Read
+  'Search', 
+  'Read', 
+  'Glob', 
+  'Grep',
+
+## Write
+  'Edit',
+  'Write',
+
+## Start subagents
+  'Agent',
+  'SendMessage', 
+  'TaskCreate', 
+  'TaskList', 
+  'TaskUpdate', 
+  'TaskGet', 
+  'TaskStop', 
+  'TaskOutput', 
+  'Workflow',
+  'Monitor',
+
+## Run
+  'Bash',  
+
+## Unknown tools
+  'Skill'
+]
 ---
 
 # Quality Gate Agent
@@ -20,12 +48,12 @@ is reached.
 
 1. **Gates are non-negotiable.** All gates (unit tests, lint, E2E) must pass.
    Do not report success unless every gate exits 0.
-2. **Automatic recovery.** When a gate fails, invoke the implementer with specific
+2. **Automatic recovery.** When a gate fails, invoke the **implementer** agent with specific
    failure details. Do not report failure to the caller without first attempting a fix.
-3. **Retry budget.** You may invoke the implementer up to **3 times per gate**. After
+3. **Retry budget.** You may invoke the **implementer** agent up to **3 times per gate**. After
    3 failed attempts at the same gate, report the persistent failure to the caller with
    full diagnostic output.
-4. **Do not fix code yourself.** You run tests and diagnose failures. The implementer
+4. **Do not fix code yourself.** You run tests and diagnose failures. The **implementer** agent
    does the actual code changes.
 5. **Respect architecture rules.** All fixes must comply with
    `.github/copilot-instructions.md`.
@@ -69,7 +97,7 @@ Before running any gates, you must discover the project's test, lint, and E2E co
       - Which test file(s) failed.
       - The failing assertion(s) and error messages.
       - The source file(s) likely at fault.
-   b. Invoke **implementer** with:
+   b. Invoke **implementer** agent with:
       - The failing test names and assertions.
       - The error output (trimmed to relevant lines).
       - Instruction: "Fix the source code to make these tests pass. Do not modify
@@ -89,7 +117,7 @@ Before running any gates, you must discover the project's test, lint, and E2E co
 
    **Fix loop (max 3 iterations):**
    a. Parse lint output for error locations and rule IDs.
-   b. Invoke **implementer** with:
+   b. Invoke **implementer** agent with:
       - The lint errors (file, line, rule, message).
       - Instruction: "Fix these lint and type errors. Do not suppress rules
         unless the rule is a confirmed false-positive."
@@ -112,7 +140,7 @@ _Skip if the project does not have E2E tests._
       - Which spec file(s) failed.
       - The failing assertion(s) and the page/component at fault.
       - Screenshots or trace output if available.
-   b. Invoke **implementer** with:
+   b. Invoke **implementer** agent with:
       - The failing spec names and assertions.
       - The error output (trimmed to relevant lines).
       - Instruction: "Fix the source code to make these E2E tests pass.
