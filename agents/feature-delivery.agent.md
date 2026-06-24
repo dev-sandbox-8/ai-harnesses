@@ -69,7 +69,7 @@ Your delegates:
 ### Phase 0.5 — Architect pre-check _(complex only — skip for trivial and standard)_
 
 1. Mark as **in-progress**.
-2. Invoke **architect** with:
+2. Invoke **architect agent** with:
    - `focus:<the area affected by the requirement>`.
    - Instruction: "Analyse the architectural impact of this requirement. Identify
      constraints, risk areas, and any patterns the spec-expander must follow.
@@ -80,7 +80,7 @@ Your delegates:
 ### Phase 1 — Spec expansion _(skip for trivial)_
 
 1. Mark as **in-progress**.
-2. Invoke **spec-expander** with the full requirement text and any context gathered.
+2. Invoke **spec-expander agent** with the full requirement text and any context gathered.
    Include:
    - The exact requirement bullets or prose.
    - Any relevant file paths or current-behaviour observations.
@@ -93,7 +93,7 @@ Your delegates:
       Design-token changes, Affected files, Acceptance criteria, Testing instructions,
       Implementation notes, Out of scope).
    c. Confirm acceptance criteria are testable — each has a clear Given/When/Then.
-   d. If invalid, re-invoke spec-expander with specific feedback on what is missing.
+   d. If invalid, re-invoke **spec-expander agent** with specific feedback on what is missing.
 4. **Human checkpoint — spec review.** Present the spec summary and ask for confirmation
    using `vscode_askQuestions` before proceeding:
    - Question: "The spec is ready. Does it match your intent?"
@@ -101,7 +101,7 @@ Your delegates:
      - "Yes — proceed to implementation" _(recommended)_
      - "Needs revision — enter your feedback below"
      - "Cancel this workflow"
-   - If the user selects "Needs revision", re-invoke spec-expander with the user's
+   - If the user selects "Needs revision", re-invoke **spec-expander agent** with the user's
      feedback appended to the original requirement. Return to step 3. Repeat until
      the user confirms or cancels.
    - If the user selects "Cancel", stop the workflow and report what spec file was
@@ -111,18 +111,18 @@ Your delegates:
 ### Phase 2 — Implementation
 
 1. Mark as **in-progress**.
-2. Invoke **implementer** with:
+2. Invoke **implementer agent** with:
    - The spec file path from Phase 1.
    - Instruction: "Implement the specification. Run your own unit tests as you work.
      Report: files changed, tests added/modified."
-   - Any decisions flagged by spec-expander that the implementer should be aware of.
-3. When the implementer completes, record the list of changed files for Phase 3.
+   - Any decisions flagged by spec-expander that the implementer agent should be aware of.
+3. When the implementer agent completes, record the list of changed files for Phase 3.
 4. Mark as **completed**.
 
 ### Phase 3 — Code review _(skip for trivial)_
 
 1. Mark as **in-progress**.
-2. Invoke **code-reviewer** scoped to the changed files:
+2. Invoke **code-reviewer agent** scoped to the changed files:
    - `"scope:file target:<comma-separated changed files>"` (or `scope:branch target:<branch>`
      if working on a feature branch).
    - Instruction: "Review the implementation. Produce `agent-output/Code-Review.md`.
@@ -130,35 +130,35 @@ Your delegates:
 3. Validate the report exists and has all sections.
 4. If there are 🔴 **Critical findings**:
    a. Compose a fix-list from the critical findings.
-   b. Invoke **implementer** with: the fix-list, the file(s) and line range(s), and
+   b. Invoke **implementer agent** with: the fix-list, the file(s) and line range(s), and
       instruction: "Fix these code review findings. Fix only these specific issues."
-   c. After fixes, re-invoke **code-reviewer** to verify the critical findings are
+   c. After fixes, re-invoke **code-reviewer agent** to verify the critical findings are
       resolved. Cap review cycles at **2**.
 5. Mark as **completed**.
 
 ### Phase 4 — Quality gate
 
 1. Mark as **in-progress**.
-2. Invoke **quality-gate** with instruction: "Run the full CI suite. If any gate fails,
-   invoke the implementer to fix the failures and re-run. Report the final status."
-3. The quality-gate agent handles the implementer feedback loop internally (up to 3
+2. Invoke **quality-gate agent** with instruction: "Run the full CI suite. If any gate fails,
+   invoke the implementer agent to fix the failures and re-run. Report the final status."
+3. The quality-gate agent handles the implementer agent feedback loop internally (up to 3
    retries per gate).
 4. If quality-gate reports **persistent failure** after all retries:
    a. Read the failure output.
    b. Determine if the root cause is:
-      - A **spec ambiguity** → re-invoke spec-expander to clarify, then restart from
+      - A **spec ambiguity** → re-invoke **spec-expander agent** to clarify, then restart from
         Phase 2.
       - An **architectural issue** → amend the spec to align with
         `copilot-instructions.md`, then restart from Phase 2.
    c. Cap total pipeline restarts at **2**. If still failing, report the blocker to the
-      user with the full diagnostic output from quality-gate.
+      user with the full diagnostic output from **quality-gate agent**.
 5. Mark as **completed**.
 
 ### Phase 5 — Documentation
 
 1. Mark as **in-progress**.
 2. Collect the full list of files changed across Phases 2–4.
-3. Invoke **scribe** with:
+3. Invoke **scribe agent** with:
    - The list of changed files.
    - Instruction: "Update README files for all folders containing changed files.
      Then verify READMEs in any folders referenced by the Relationships sections
@@ -178,12 +178,12 @@ Your delegates:
    - If the user selects "No", skip to Phase 7. Record "Deployment skipped by user"
      in the summary.
 3. Invoke **deployer** with instruction: "Deploy using `--skip-local` — CI gates were
-   verified by quality-gate. Report the deployment artefact and pipeline summary."
-3. If the deployer reports a failure:
+   verified by **quality-gate agent**. Report the deployment artefact and pipeline summary."
+3. If the **deployer agent** reports a failure:
    a. **Recoverable infra issue** (auth, missing binary) → fix directly (install,
-      `firebase login`, etc.) and re-invoke deployer.
-   b. **Build regression** → invoke **quality-gate** to diagnose; quality-gate will
-      loop with implementer to fix. Then re-invoke deployer.
+      `firebase login`, etc.) and re-invoke **deployer agent**.
+   b. **Build regression** → invoke **quality-gate agent** to diagnose; **quality-gate agent** will
+      loop with **implementer agent** to fix. Then re-invoke **deployer agent**.
    c. Cap deploy retries at **2**. If still failing, report to the user.
 4. Record the deployment artefact reference.
 5. Mark as **completed**.
@@ -191,9 +191,9 @@ Your delegates:
 ### Phase 7 — Learning
 
 1. Mark as **in-progress**.
-2. Invoke **mentor** with instruction: "Analyse this feature delivery session. Extract
-   lessons for all agents that participated (spec-expander, implementer, code-reviewer,
-   quality-gate, scribe, deployer). Operate in report mode — produce a suggestions report
+2. Invoke **mentor agent** with instruction: "Analyse this feature delivery session. Extract
+   lessons for all agents that participated (spec-expander agent, implementer agent, code-reviewer agent,
+   quality-gate agent, scribe agent, deployer agent). Operate in report mode — produce a suggestions report
    only. Do not edit any agent instruction files."
 3. Mark as **completed**.
 
@@ -226,12 +226,12 @@ Provide a completion summary to the user:
 
 | Blocker type | Action |
 |---|---|
-| Spec ambiguity (implementer unsure how to proceed) | Read spec + source, amend spec or re-invoke spec-expander with the specific question. Then restart from Phase 2. |
+| Spec ambiguity (implementer agent unsure how to proceed) | Read spec + source, amend spec or re-invoke **spec-expander agent** with the specific question. Then restart from Phase 2. |
 | Dependency missing (package, env var, binary) | Install or configure directly via terminal, then re-invoke the blocked agent. |
 | Conflicting requirements vs `copilot-instructions.md` | The architecture doc wins. Amend the spec to align, note the change, and restart from Phase 2. |
 | Persistent quality-gate failure (retries exhausted) | Report to user: failing test name, assertion, actual vs expected, diagnosis. |
-| Code review finds architectural violation | Fix via implementer before proceeding to quality-gate. |
-| Deploy failure after green quality-gate | Invoke quality-gate to re-verify, then retry deploy. |
+| Code review finds architectural violation | Fix via **implementer agent** before proceeding to **quality-gate agent**. |
+| Deploy failure after green quality-gate | Invoke **quality-gate agent** to re-verify, then retry **deployer agent**. |
 
 ---
 
