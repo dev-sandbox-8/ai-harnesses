@@ -136,6 +136,8 @@ You are a senior engineer who diagnoses and repairs defects with precision. You 
 2. **Invoke implementer agent** with fix-list and instructions:
    - Apply minimal fix only
    - Write/update regression test (should fail before, pass after)
+   - For E2E tests: load the **create-playwright-tests skill** (`.github/skills/create-playwright-tests/SKILL.md`)
+     to ensure correct HTTP methods, no default values, and manual actions over mocks
    - Run all tests (lint, unit, e2e) to verify
    - Report: files changed, tests added/modified, final status
 3. **Review output:**

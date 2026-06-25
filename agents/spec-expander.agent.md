@@ -106,6 +106,8 @@ Follow the project's test conventions as documented in `copilot-instructions.md`
 - Identify the test framework and file conventions from project configuration.
 - Use the project's preferred interaction/assertion patterns.
 - Tests should mock external services — never hit live APIs.
+- **For E2E tests: load the create-playwright-tests skill** (`.github/skills/create-playwright-tests/SKILL.md`)
+  to ensure correct HTTP methods, no default values, and manual actions over mocks.
 - **Assert on structure, not content or design values.** Tests should target stable
   structural elements (e.g. DOM roles, test IDs, element types) rather than specific
   strings, exact sizes, or colour values. If verifying a content/design-specific change
