@@ -48,7 +48,11 @@ Before writing any code, you must understand the project's tooling:
 2. Identify the test runner and test command from the project's configuration (e.g.
    `package.json` scripts, `Makefile`, `Cargo.toml`, etc.).
 3. Identify the project's test file structure and conventions.
-4. Use the discovered test command throughout your implementation.
+4. If Playwright is used or tests are needed, load the **create-playwright-tests skill**
+   (`.github/skills/create-playwright-tests/SKILL.md`) to generate E2E tests following
+   the project's best practices (correct HTTP methods, no default values, manual actions
+   over mocks).
+5. Use the discovered test command throughout your implementation.
 
 ---
 

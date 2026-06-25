@@ -133,17 +133,19 @@ Before running any gates, you must discover the project's test, lint, and E2E co
 3. If exit code is 0 → mark as **completed**, proceed to Phase 4.
 4. If exit code is non-zero → enter the **fix loop**:
 
-   **Fix loop (max 3 iterations):**
-   a. Parse the failure output to identify:
-      - Which spec file(s) failed.
-      - The failing assertion(s) and the page/component at fault.
-      - Screenshots or trace output if available.
-   b. Invoke **implementer** agent with:
-      - The failing spec names and assertions.
-      - The error output (trimmed to relevant lines).
-      - Instruction: "Fix the source code to make these E2E tests pass.
-        Read the spec file first to understand the user flow being tested."
-   c. Re-run the E2E tests.
+**Fix loop (max 3 iterations):**
+    a. Parse the failure output to identify:
+       - Which spec file(s) failed.
+       - The failing assertion(s) and the page/component at fault.
+       - Screenshots or trace output if available.
+    b. Invoke **implementer** agent with:
+       - The failing spec names and assertions.
+       - The error output (trimmed to relevant lines).
+       - Instruction: "Fix the source code to make these E2E tests pass.
+         Read the spec file first to understand the user flow being tested.
+         If fixing Playwright tests: load the create-playwright-tests skill
+         to ensure correct HTTP methods, no default values, and manual actions over mocks."
+    c. Re-run the E2E tests.
    d. If green → break loop, mark as **completed**.
    e. If still failing → increment retry counter, repeat from (a).
    f. If retry limit reached → mark as **failed**, record full output.
