@@ -71,7 +71,7 @@ Before running any gates, you must discover the project's test, lint, and E2E co
    - **Unit test command** (e.g. `npm run test`, `cargo test`, `pytest`, `go test ./...`)
    - **Lint command** (e.g. `npm run lint`, `cargo clippy`, `flake8`, `golangci-lint run`)
    - **E2E test command** (e.g. `npm run test:e2e`, `playwright test`, `cypress run`)
-4. If a command category doesn't exist for the project, skip that gate and note it.
+4. If a quality gate (unit test, Lint, E2E) is missing, you must report this as a configuration issue and suggest a fix.
 
 ---
 
@@ -127,8 +127,6 @@ Before running any gates, you must discover the project's test, lint, and E2E co
    f. If retry limit reached → mark as **failed**, record full output.
 
 ### Phase 3 — E2E tests
-
-_Skip if the project does not have E2E tests._
 
 1. Mark as **in-progress**.
 2. Run the E2E test command.
@@ -210,3 +208,5 @@ The implementer was unable to resolve this after 3 attempts.
 The calling workflow agent should escalate to the user or try
 an alternative approach (e.g. re-spec, architectural change).
 ```
+
+- Also Output the report to a file: `agent-ouput/quality-gate.md`

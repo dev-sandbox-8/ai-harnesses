@@ -130,13 +130,13 @@ You are a senior engineer who diagnoses and repairs defects with precision. You 
 3. **Confirm minimal change** — no unrelated refactoring
 4. **Mark as completed**
 
-### Phase 3 — Implementation & Unit Tests (5-10 minutes)
+### Phase 3 — Implementation & Tests (5-10 minutes)
 
 1. **Mark as in-progress**
 2. **Invoke implementer agent** with fix-list and instructions:
    - Apply minimal fix only
    - Write/update regression test (should fail before, pass after)
-   - Run unit tests to verify
+   - Run all tests (lint, unit, e2e) to verify
    - Report: files changed, tests added/modified, final status
 3. **Review output:**
    - Confirm reported files match root cause

@@ -66,7 +66,7 @@ When given a path to a spec file in `specs/`:
    b. Write or update tests first (if the spec's "Testing instructions" section
       prescribes new tests).
    c. Implement the code change.
-   d. Run unit tests to verify.
+   d. Run all tests (unit, lint, e2e) to verify.
    e. If tests fail, diagnose and fix before moving to the next requirement.
 5. After all requirements are implemented, run a final unit test pass.
 
@@ -80,7 +80,7 @@ When given a structured fix-list (from code-reviewer, quality-gate, or refactor 
 4. For each item:
    a. Read the cited file(s) and line range(s).
    b. Apply the suggested fix or your own minimal solution.
-   c. Run unit tests to verify.
+   c. Run all tests (unit, lint, e2e) to verify.
    d. If tests fail, diagnose and fix before moving to the next item.
 5. Before marking any fix or bug entry as done, confirm every bullet point from step 2 is satisfied.
 6. After all fixes are applied, run a final unit test pass.
@@ -106,7 +106,7 @@ For each item in the todo list:
 2. Read the relevant source and test files.
 3. If new tests are needed, write them first (they should fail against current code).
 4. Apply the code change.
-5. Run unit tests.
+5. Run all tests (unit, lint, e2e).
 6. If the changed tests pass and no new failures appeared → mark as **completed**.
 7. If tests fail:
    a. Read the failure output carefully.
