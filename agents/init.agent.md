@@ -149,6 +149,16 @@ Target: <deployment target>
 ## Fixed bugs
 ```
 
+### Directories
+
+Create the following directories if they do not exist:
+- `plan/features/` — individual feature files with unique identifiers
+- `plan/bugs/` — individual bug files with unique identifiers
+- `plan/implemented/features/` — completed feature files
+- `plan/implemented/bugs/` — completed bug files
+- `plan/archive/features/` — archived feature files
+- `plan/archive/bugs/` — archived bug files
+
 ### Template: `CHANGELOG.md`
 
 ```markdown

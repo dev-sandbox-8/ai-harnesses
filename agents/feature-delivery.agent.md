@@ -47,10 +47,12 @@ Your delegates:
 
 1. Read `.github/copilot-instructions.md` to internalise project constraints.
 2. **Resolve the requirement source** using priority order:
-   - **Priority 1 — Prompt content.** Requirement text in the prompt → use directly.
-   - **Priority 2 — Referenced file.** Named file → read and use its contents. If it is
-     already a spec file in `specs/`, skip Phase 1 entirely.
-   - **Priority 3 — plan/ROADMAP.md fallback.** Extract items under `## Prepared requirements`.
+    - **Priority 1 — Prompt content.** Requirement text in the prompt → use directly.
+    - **Priority 2 — Referenced file.** Named file → read and use its contents. If it is
+      already a spec file in `specs/`, skip Phase 1 entirely.
+    - **Priority 2.5 — Feature file.** If a file in `plan/features/` is referenced or
+      contains a feature request, read that file and use its contents.
+    - **Priority 3 — plan/ROADMAP.md fallback.** Extract items under `## Prepared requirements`.
 3. **Classify complexity** to determine the pipeline configuration:
 
    | Class | Signals | Pipeline adjustment |
@@ -203,6 +205,11 @@ Your delegates:
 workflow to keep `specs/` uncluttered:
 1. Create `specs/archive/` if it does not exist.
 2. Move each spec generated in Phase 1: `specs/<slug>.md` → `specs/archive/<slug>.md`.
+
+**Feature file update.** If the feature originated from a file in `plan/features/`:
+1. Move the feature file to `plan/implemented/features/` after successful deployment.
+2. Record the completion date and commit SHA in the feature file.
+3. If the feature has a follow-up, move to `plan/archive/features/` instead.
 
 Provide a completion summary to the user:
 

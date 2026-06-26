@@ -111,11 +111,19 @@ lint tools, build steps, and deployment procedures for the project at hand.
 | Temporary test notes | `agent-output/<slug>-temp-tests.md` | Documents temporary tests with removal conditions |
 | Architecture rules | `.github/copilot-instructions.md` | Canonical constraints all agents must follow |
 | Roadmap | `plan/ROADMAP.md` | Source of prepared requirements (Priority 3 input) |
-| Bug tracker | `plan/BUG_TRACKER.md` | Tracks open bugs and their status |
+| Bug tracker | `plan/BUG_TRACKER.md` | Legacy bug tracking (for existing projects) |
+| Feature files | `plan/features/<id>-<name>.md` | Individual feature files with unique identifiers |
+| Bug files | `plan/bugs/<id>-<name>.md` | Individual bug files with unique identifiers |
+| Implemented features | `plan/implemented/features/` | Completed feature files |
+| Implemented bugs | `plan/implemented/bugs/` | Completed bug files |
+| Archived features | `plan/archive/features/` | Historical feature files |
+| Archived bugs | `plan/archive/bugs/` | Historical bug files |
 | Changelog | `CHANGELOG.md` | Release history maintained by release-manager |
 | Architect report | `agent-output/Architect-Review.md` | Output of the architect agent |
 | Code review report | `agent-output/Code-Review.md` | Output of the code-reviewer agent |
+| Quality gate report | `agent-output/quality-gate.md` | Output of the quality-gate agent |
 | Design summary | `agent-output/design-summary.md` | Output of the designer agent |
+| Mentor report | `agent-output/Mentor-Report-*.md` | Output of the mentor agent |
 
 ### Skills
 
@@ -126,6 +134,7 @@ runtime when needed — they are never included by default.
 |-------|------|-----------|
 | **git-ops** | `.github/skills/git-ops/SKILL.md` | release-manager, bug-fix, feature-delivery (when branching) |
 | **security-audit** | `.github/skills/security-audit/SKILL.md` | code-reviewer, architect |
+| **create-playwright-tests** | `.github/skills/create-playwright-tests/SKILL.md` | implementer, bug-fix, quality-gate, spec-expander (for E2E tests) |
 
 ### Prompts
 

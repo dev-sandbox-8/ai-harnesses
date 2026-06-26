@@ -61,8 +61,10 @@ everything it needs to write tests and ship the feature without further clarific
      (bullet points, user stories, acceptance criteria, or a prose specification), treat
      that as the full set of requirements and skip to step 3.
    - **Priority 2 — Referenced file.** If the prompt names or links a specific file
-     (e.g. `specs/my-feature.md`, `REQUIREMENTS.txt`), read that file and use its contents
+     (e.g. `specs/my-feature.md`, `plan/features/001-feature.md`, `REQUIREMENTS.txt`), read that file and use its contents
      as the requirements.
+   - **Priority 2.5 — Feature file.** If a file in `plan/features/` exists and contains
+     requirement text, read that file and use its contents.
    - **Priority 3 — plan/ROADMAP.md fallback.** If neither of the above applies, read
      `plan/ROADMAP.md` and extract the items under `## Prepared requirements` (or the section
      matching the argument hint, if one was provided).

@@ -155,13 +155,17 @@ You are a senior engineer who diagnoses and repairs defects with precision. You 
    - Pre-existing unrelated: report separately, don't block summary
 4. **Mark as completed**
 
-### Phase 5 — BUG_TRACKER Update (1-2 minutes)
+### Phase 5 — Bug file update (1-2 minutes)
 
 1. **Mark as in-progress**
-2. **If bug from BUG_TRACKER.md:**
+2. **If bug from a file in `plan/bugs/`:**
+   - Move the bug file to `plan/archive/bugs/` after fix
+   - Record the fix commit SHA in the bug file
+   - Update the status to `Fixed` in the bug file
+3. **If bug from BUG_TRACKER.md (legacy):**
    - Move fixed entry to `## Fixed bugs` section or update status to `Fixed`
    - Record: fix commit SHA, files changed, one-line description
-3. **Mark as completed**
+4. **Mark as completed**
 
 ### Phase 6 — Learning (1-2 minutes)
 
