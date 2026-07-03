@@ -85,7 +85,7 @@
     "architect": {
       "description": "An architectural review agent for the portfolio website. It audits the entire codebase against the project's documented standards (copilot-instructions.md), Next.js 16 App Router best practices, and general software-engineering principles. Run this agent any time you want a structured health-check of the project architecture, after a significant feature is added, or before preparing a release. It produces a single Markdown report at agent-output/Architect-Review.md covering violations, best-practice gaps, and improvement opportunities — categorised by severity.",
       "mode": "all",
-      "prompt": "{file:./agent-prompts/architect.agent.md}",
+      "prompt": "{file:./agents/architect.agent.md}",
       "permission": {
         "read": "allow",
         "glob": "allow",
@@ -103,7 +103,7 @@
     "code-reviewer": {
       "description": "Reviews code for quality and best practices. Run this agent after a PR is merged to get feedback on how to improve the codebase, or to audit recent changes. It produces a Markdown report in agent-output/Code-Review.md that includes an overall quality score, a list of issues categorized by severity, and suggestions for improvement.",
       "mode": "all",
-      "prompt": "{file:./agent-prompts/code-reviewer.agent.md}",
+      "prompt": "{file:./agents/code-reviewer.agent.md}",
       "permission": {
         "read": "allow",
         "glob": "allow",
@@ -120,7 +120,7 @@
     "deployer": {
       "description": "Tier 3 specialist that runs the deployment pipeline and reports the outcome. Evolved from preview-deployer with a cleaner interface — assumes CI gates have already been verified by the quality-gate agent unless told otherwise.",
       "mode": "all",
-      "prompt": "{file:./agent-prompts/deployer.agent.md}",
+      "prompt": "{file:./agents/deployer.agent.md}",
       "permission": {
         "read": "allow",
         "glob": "allow",
@@ -137,7 +137,7 @@
     "designer": {
       "description": "Full-scope creative director and front-end design agent for the portfolio website. Proposes and implements holistic visual redesigns — backgrounds, animations, typography, layered UI, imagery, component composition, and colour — across the entire site. Can take inspiration from a supplied URL or design brief. Operates in three modes (1) Site-wide redesign — analyses the current site, proposes a complete visual direction, and implements it end-to-end; (2) Targeted refinement — tweaks specific aspects (colour, animation, backgrounds, etc.) across affected files; (3) Inspiration-driven redesign — fetches and analyses a reference website, extracts design patterns, and adapts them to this portfolio. Produces a design-decisions summary documenting the rationale and placeholder-image replacement guide.",
       "mode": "all",
-      "prompt": "{file:./agent-prompts/designer.agent.md}",
+      "prompt": "{file:./agents/designer.agent.md}",
       "permission": {
         "read": "allow",
         "glob": "allow",
@@ -154,7 +154,7 @@
     "feature-delivery": {
       "description": "Tier 2 workflow agent for end-to-end feature delivery. Takes a requirement — from the prompt, a referenced file, or ROADMAP.md — and drives it through spec expansion, implementation, code review, quality gating, deployment, and learning. Coordinates Tier 3 specialists: spec-expander, implementer, code-reviewer, quality-gate, deployer, and mentor.",
       "mode": "all",
-      "prompt": "{file:./agent-prompts/feature-delivery.agent.md}",
+      "prompt": "{file:./agents/feature-delivery.agent.md}",
       "permission": {
         "read": "allow",
         "glob": "allow",
@@ -171,7 +171,7 @@
     "implementer": {
       "description": "Tier 3 specialist that writes and modifies code to satisfy a specification or fix-list. Works in a strict test-driven discipline — runs its own unit tests as it works to verify changes incrementally. Does not own full CI verification (that is quality-gate's responsibility). Accepts two input modes- a spec file path for new feature work, or a fix-list for targeted remediation.",
       "mode": "all",
-      "prompt": "{file:./agent-prompts/implementer.agent.md}",
+      "prompt": "{file:./agents/implementer.agent.md}",
       "permission": {
         "read": "allow",
         "glob": "allow",
@@ -188,7 +188,7 @@
     "mentor": {
       "description": "Mentor — analyzes a chat session to extract lessons learned and produce actionable improvement suggestions for every agent that participated",
       "mode": "all",
-      "prompt": "{file:./agent-prompts/mentor.agent.md}",
+      "prompt": "{file:./agents/mentor.agent.md}",
       "permission": {
         "read": "allow",
         "glob": "allow",
@@ -203,7 +203,7 @@
     "team-lead": {
       "description": "  Thin intent router that parses the user's request and delegates to the correct workflow agent. Does not contain workflow logic itself — it dispatches to feature-delivery, refactor, or release-manager and relays the result.",
       "mode": "primary",
-      "prompt": "{file:./agent-prompts/orchestrator.agent.md}",
+      "prompt": "{file:./agents/orchestrator.agent.md}",
       "permission": {
         "read": "allow",
         "glob": "allow",
@@ -231,7 +231,7 @@
     "quality-gate": {
       "description": "Tier 3 specialist that runs the full CI suite (unit tests, lint, E2E) and enforces green gates. When a gate fails, it automatically invokes the implementer agent to fix the issue, then re-runs the suite — creating a self-healing feedback loop. Returns either 'all green' or 'blocked after N retries' with full diagnostic output.",
       "mode": "all",
-      "prompt": "{file:./agent-prompts/quality-gate.agent.md}",
+      "prompt": "{file:./agents/quality-gate.agent.md}",
       "permission": {
         "read": "allow",
         "glob": "allow",
@@ -246,7 +246,7 @@
     "refactor": {
       "description": "Tier 2 workflow agent for analysis & remediation. Coordinates architect and code-reviewer for analysis, implementer for fixes, quality-gate for verification, deployer for deployment, and mentor for learning extraction. Accepts scope:/target:/focus: parameters from the orchestrator and relays them to the appropriate Tier 3 specialists.",
       "mode": "all",
-      "prompt": "{file:./agent-prompts/refactor.agent.md}",
+      "prompt": "{file:./agents/refactor.agent.md}",
       "permission": {
         "read": "allow",
         "glob": "allow",
@@ -262,7 +262,7 @@
     "release-manager": {
       "description": "Tier 2 workflow agent that coordinates production releases. Runs a pre-flight quality gate, then deploys. If the quality gate fails, it loops back through the implementer for fixes before retrying. Invokes the mentor agent at the end to capture lessons learned.",
       "mode": "all",
-      "prompt": "{file:./agent-prompts/release-manager.agent.md}",
+      "prompt": "{file:./agents/release-manager.agent.md}",
       "permission": {
         "read": "allow",
         "glob": "allow",
@@ -277,7 +277,7 @@
     "scribe": {
       "description": "Tier 3 specialist agent that generates and maintains per-folder README.md files documenting every file in the folder. Produces plain-language descriptions with web-reference links for jargon and technologies. Output doubles as a context-focusing index that other agents read to orient themselves quickly in unfamiliar areas of the codebase.",
       "mode": "all",
-      "prompt": "{file:./agent-prompts/scribe.agent.md}",
+      "prompt": "{file:./agents/scribe.agent.md}",
       "permission": {
         "read": "allow",
         "glob": "allow",
@@ -292,7 +292,7 @@
     "spec-expander": {
       "description": "Expands requirements into detailed, implementation-ready specifications that the test-driven-developer agent can execute. Run this agent before starting any feature work — it bridges the gap between a one-liner requirement and a fully-specified, testable change. The output is a Markdown specification file placed in `specs/` at the repository root. Input priority (1) requirement text in the prompt, (2) a file referenced in the prompt, (3) ROADMAP.md.",
       "mode": "all",
-      "prompt": "{file:./agent-prompts/spec-expander.agent.md}",
+      "prompt": "{file:./agents/spec-expander.agent.md}",
       "permission": {
         "read": "allow",
         "glob": "allow",
@@ -307,7 +307,7 @@
     "consultant": {
       "description": "Provides guidance on which workflow or agents should be invoked based on the user's request. Analyzes the request and recommends the appropriate flow, including any necessary loops.",
       "mode": "all",
-      "prompt": "{file:./agent-prompts/consultant.agent.md}",
+      "prompt": "{file:./agents/consultant.agent.md}",
       "permission": {
         "read": "allow",
         "glob": "allow",
@@ -317,7 +317,7 @@
     "digester": {
       "description": "Analyze the codebase and update agent instructions to match changes, ensuring agents have accurate, up-to-date context for better performance and accuracy.",
       "mode": "all",
-      "prompt": "{file:./agent-prompts/digester.agent.md}",
+      "prompt": "{file:./agents/digester.agent.md}",
       "permission": {
         "read": "allow",
         "glob": "allow",
