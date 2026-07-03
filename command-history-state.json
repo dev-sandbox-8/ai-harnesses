@@ -1,0 +1,21 @@
+{
+  "commandHistory": [
+    "Please could you run a quality check on the current codebase?",
+    "/agent",
+    "Please implement the spec at @specs/copy-drink-from-drinks-list.md",
+    "please adjust the specification to include the following change:\n- Tests shouldn't use default values that would be present in the form otherwaise (i.e. 330ml, 5%), since using those could hide errors",
+    "Please create a full spec for @plan/features/004.md",
+    "/model",
+    "please help me set up copilot cli with a local model",
+    "/superpexit",
+    "/superpowers:systematic-debugging the server is reporting a 500 error when running using npm run dev",
+    "/init",
+    "cli",
+    "npx run dev",
+    "yes, continue",
+    "/superpowers:brainstorming @.github/skills/writing-plans/specs/initial-design.md",
+    "/superpowers:brainstorming @initial",
+    "/help",
+    "/login"
+  ]
+}
