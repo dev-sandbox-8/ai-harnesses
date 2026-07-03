@@ -57,17 +57,6 @@
           }
         ]
       }
-    ],
-    "PostToolUseFailure": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "afplay ~/.claude/Sounds/Basso.aiff; say -v Stephanie 'Claude failed to use a tool.'; ~/.claude/scripts/discord-notify.sh 'I failed to use a tool.'"
-          }
-        ]
-      }
     ]
   },
   "statusLine": {
@@ -77,7 +66,9 @@
   "enabledPlugins": {
     "vercel@claude-plugins-official": true,
     "discord@claude-plugins-official": true,
-    "telegram@claude-plugins-official": true
+    "telegram@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true,
+    "playwright@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
@@ -88,10 +79,10 @@
     }
   },
   "effortLevel": "medium",
+  "skipWorkflowUsageWarning": true,
   "theme": "auto",
   "api": {
     "timeoutMs": 1800000
   },
-  "autoCheckPointCommits": false,
-  "skipWorkflowUsageWarning": true
+  "autoCheckPointCommits": false
 }
