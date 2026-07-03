@@ -1,0 +1,4 @@
+- Agents.md should include an instruction to add newly discovered information to AGENTS.md in a way which is efficient for an agent to retrieve, potentially using other files.
+
+Please create a new folder called `agent-context`, which is intended to contain files that agents can read to gather information about the system, project, or any other relevant context. This folder will serve as a centralized location for agents to access and add necessary information without having to parse through large documents or codebases. 
+Add instructions on how to use this folder to the AGENTS.md file, and also instructions that all new discoveries by agents should be added to this folder in a structured format that is easy for other agents to read and utilize, and referenced in the AGENTS.md file in a minimized way that will preserve context window. This will help ensure that all agents have access to the most up-to-date information and can work more efficiently.

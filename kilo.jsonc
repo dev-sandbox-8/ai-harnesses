@@ -1,0 +1,343 @@
+{
+  "$schema": "https://app.kilo.ai/config.json",
+  "disabled_providers": [],
+  "provider": {
+    "local-llm": {
+      "name": "My Local LLMs",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "http://localhost:1234/v1"
+      },
+      "models": {
+        "13fb94bfda8c8cf22497dc57b78f391a9acb426a": {
+          "name": "13fb94bfda8c8cf22497dc57b78f391a9acb426a"
+        },
+        "deepseek-coder-7b-instruct-v1.5": {
+          "name": "deepseek-coder-7b-instruct-v1.5"
+        },
+        "google/gemma-4-e4b": {
+          "name": "google/gemma-4-e4b"
+        },
+        "openai/gpt-oss-20b": {
+          "name": "openai/gpt-oss-20b"
+        },
+        "text-embedding-nomic-embed-text-v1.5": {
+          "name": "text-embedding-nomic-embed-text-v1.5"
+        },
+        "qwen/qwen3.5-9b": {
+          "name": "qwen/qwen3.5-9b"
+        },
+        "deepseek/deepseek-r1-0528-qwen3-8b": {
+          "name": "deepseek/deepseek-r1-0528-qwen3-8b"
+        },
+        "qwen2.5-coder-7b-instruct": {
+          "name": "qwen2.5-coder-7b-instruct"
+        },
+        "qwen3-coder-30b-a3b-instruct": {
+          "name": "qwen3-coder-30b-a3b-instruct"
+        },
+        "google/gemma-4-12b": {
+          "name": "google/gemma-4-12b"
+        },
+        "microsoft/phi-4-reasoning-plus": {
+          "name": "microsoft/phi-4-reasoning-plus"
+        },
+        "mistralai/codestral-22b-v0.1": {
+          "name": "mistralai/codestral-22b-v0.1"
+        },
+        "qwen/qwen3-4b-thinking-2507": {
+          "name": "qwen/qwen3-4b-thinking-2507"
+        },
+        "qwen/qwen3-14b": {
+          "name": "qwen/qwen3-14b"
+        },
+        "mistralai/ministral-3-14b-reasoning": {
+          "name": "mistralai/ministral-3-14b-reasoning"
+        },
+        "deepcoder-14b-preview": {
+          "name": "deepcoder-14b-preview"
+        },
+        "qwen3.5-4b": {
+          "name": "qwen3.5-4b"
+        },
+        "google/gemma-4-e2b": {
+          "name": "google/gemma-4-e2b"
+        }
+      }
+    },
+    "work-laptop": {
+      "name": "Work-LLMs",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "http://10.0.0.19:1234/v1"
+      },
+      "models": {
+        "qwen/qwen3.6-27b": {
+          "name": "qwen/qwen3.6-27b"
+        }
+      }
+    }
+  },
+  "permission": {
+    "bash": "allow"
+  },
+  "agent": {
+    "architect": {
+      "description": "An architectural review agent for the portfolio website. It audits the entire codebase against the project's documented standards (copilot-instructions.md), Next.js 16 App Router best practices, and general software-engineering principles. Run this agent any time you want a structured health-check of the project architecture, after a significant feature is added, or before preparing a release. It produces a single Markdown report at agent-output/Architect-Review.md covering violations, best-practice gaps, and improvement opportunities — categorised by severity.",
+      "mode": "all",
+      "prompt": "{file:./agent-prompts/architect.agent.md}",
+      "permission": {
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow",
+
+        "question": "allow",
+
+        "edit": "allow",
+        "write": "allow",
+        "apply_patch": "allow",
+        
+        "bash": "deny"
+      }
+    },
+    "code-reviewer": {
+      "description": "Reviews code for quality and best practices. Run this agent after a PR is merged to get feedback on how to improve the codebase, or to audit recent changes. It produces a Markdown report in agent-output/Code-Review.md that includes an overall quality score, a list of issues categorized by severity, and suggestions for improvement.",
+      "mode": "all",
+      "prompt": "{file:./agent-prompts/code-reviewer.agent.md}",
+      "permission": {
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow",
+
+        "question": "allow",
+
+        "edit": "allow",
+        "write": "allow",
+        "apply_patch": "allow",
+        "bash": "deny"
+      }
+    },
+    "deployer": {
+      "description": "Tier 3 specialist that runs the deployment pipeline and reports the outcome. Evolved from preview-deployer with a cleaner interface — assumes CI gates have already been verified by the quality-gate agent unless told otherwise.",
+      "mode": "all",
+      "prompt": "{file:./agent-prompts/deployer.agent.md}",
+      "permission": {
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow",
+
+        "question": "allow",
+
+        "edit": "allow",
+        "write": "allow",
+        "apply_patch": "allow",
+        "bash": "allow"
+      }
+    },
+    "designer": {
+      "description": "Full-scope creative director and front-end design agent for the portfolio website. Proposes and implements holistic visual redesigns — backgrounds, animations, typography, layered UI, imagery, component composition, and colour — across the entire site. Can take inspiration from a supplied URL or design brief. Operates in three modes (1) Site-wide redesign — analyses the current site, proposes a complete visual direction, and implements it end-to-end; (2) Targeted refinement — tweaks specific aspects (colour, animation, backgrounds, etc.) across affected files; (3) Inspiration-driven redesign — fetches and analyses a reference website, extracts design patterns, and adapts them to this portfolio. Produces a design-decisions summary documenting the rationale and placeholder-image replacement guide.",
+      "mode": "all",
+      "prompt": "{file:./agent-prompts/designer.agent.md}",
+      "permission": {
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow",
+
+        "question": "allow",
+
+        "edit": "allow",
+        "write": "allow",
+        "apply_patch": "allow",
+        "bash": "allow"
+      }
+    },
+    "feature-delivery": {
+      "description": "Tier 2 workflow agent for end-to-end feature delivery. Takes a requirement — from the prompt, a referenced file, or ROADMAP.md — and drives it through spec expansion, implementation, code review, quality gating, deployment, and learning. Coordinates Tier 3 specialists: spec-expander, implementer, code-reviewer, quality-gate, deployer, and mentor.",
+      "mode": "all",
+      "prompt": "{file:./agent-prompts/feature-delivery.agent.md}",
+      "permission": {
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow",
+
+        "question": "allow",
+
+        "edit": "allow",
+        "write": "allow",
+        "apply_patch": "allow",
+        "bash": "allow"
+      }
+    },
+    "implementer": {
+      "description": "Tier 3 specialist that writes and modifies code to satisfy a specification or fix-list. Works in a strict test-driven discipline — runs its own unit tests as it works to verify changes incrementally. Does not own full CI verification (that is quality-gate's responsibility). Accepts two input modes- a spec file path for new feature work, or a fix-list for targeted remediation.",
+      "mode": "all",
+      "prompt": "{file:./agent-prompts/implementer.agent.md}",
+      "permission": {
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow",
+
+        "question": "allow",
+
+        "edit": "allow",
+        "write": "allow",
+        "apply_patch": "allow",
+        "bash": "allow"
+      }
+    },
+    "mentor": {
+      "description": "Mentor — analyzes a chat session to extract lessons learned and produce actionable improvement suggestions for every agent that participated",
+      "mode": "all",
+      "prompt": "{file:./agent-prompts/mentor.agent.md}",
+      "permission": {
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow",
+
+        "edit": "allow",
+        "write": "allow",
+        "apply_patch": "allow",
+        "bash": "deny"
+      }
+    },
+    "team-lead": {
+      "description": "  Thin intent router that parses the user's request and delegates to the correct workflow agent. Does not contain workflow logic itself — it dispatches to feature-delivery, refactor, or release-manager and relays the result.",
+      "mode": "primary",
+      "prompt": "{file:./agent-prompts/orchestrator.agent.md}",
+      "permission": {
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow",
+
+        "edit": "allow",
+        "write": "allow",
+        "apply_patch": "allow",
+
+        "bash": "allow",
+
+        "question": "allow",
+        "task": "allow",
+        "todowrite": "allow",
+        "todoread": "allow",
+        "plan": "allow",
+        "skill": "allow",
+        "agent_manager": "allow",
+
+        "webfetch": "allow",
+        "websearch": "allow",
+        "codesearch": "allow"
+      }
+    },
+    "quality-gate": {
+      "description": "Tier 3 specialist that runs the full CI suite (unit tests, lint, E2E) and enforces green gates. When a gate fails, it automatically invokes the implementer agent to fix the issue, then re-runs the suite — creating a self-healing feedback loop. Returns either 'all green' or 'blocked after N retries' with full diagnostic output.",
+      "mode": "all",
+      "prompt": "{file:./agent-prompts/quality-gate.agent.md}",
+      "permission": {
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow",
+
+        "edit": "allow",
+        "write": "allow",
+        "apply_patch": "allow",
+        "bash": "allow"
+      }
+    },
+    "refactor": {
+      "description": "Tier 2 workflow agent for analysis & remediation. Coordinates architect and code-reviewer for analysis, implementer for fixes, quality-gate for verification, deployer for deployment, and mentor for learning extraction. Accepts scope:/target:/focus: parameters from the orchestrator and relays them to the appropriate Tier 3 specialists.",
+      "mode": "all",
+      "prompt": "{file:./agent-prompts/refactor.agent.md}",
+      "permission": {
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow",
+
+        "edit": "allow",
+        "write": "allow",
+        "apply_patch": "allow",
+
+        "bash": "allow"
+      }
+    },
+    "release-manager": {
+      "description": "Tier 2 workflow agent that coordinates production releases. Runs a pre-flight quality gate, then deploys. If the quality gate fails, it loops back through the implementer for fixes before retrying. Invokes the mentor agent at the end to capture lessons learned.",
+      "mode": "all",
+      "prompt": "{file:./agent-prompts/release-manager.agent.md}",
+      "permission": {
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow",
+
+        "edit": "allow",
+        "write": "allow",
+        "apply_patch": "allow",
+        "bash": "allow"
+      }
+    },
+    "scribe": {
+      "description": "Tier 3 specialist agent that generates and maintains per-folder README.md files documenting every file in the folder. Produces plain-language descriptions with web-reference links for jargon and technologies. Output doubles as a context-focusing index that other agents read to orient themselves quickly in unfamiliar areas of the codebase.",
+      "mode": "all",
+      "prompt": "{file:./agent-prompts/scribe.agent.md}",
+      "permission": {
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow",
+
+        "edit": "allow",
+        "write": "allow",
+        "apply_patch": "allow",
+        "bash": "allow"
+      }
+    },
+    "spec-expander": {
+      "description": "Expands requirements into detailed, implementation-ready specifications that the test-driven-developer agent can execute. Run this agent before starting any feature work — it bridges the gap between a one-liner requirement and a fully-specified, testable change. The output is a Markdown specification file placed in `specs/` at the repository root. Input priority (1) requirement text in the prompt, (2) a file referenced in the prompt, (3) ROADMAP.md.",
+      "mode": "all",
+      "prompt": "{file:./agent-prompts/spec-expander.agent.md}",
+      "permission": {
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow",
+
+        "edit": "allow",
+        "write": "allow",
+        "apply_patch": "allow",
+        "bash": "allow"
+      }
+    },
+    "consultant": {
+      "description": "Provides guidance on which workflow or agents should be invoked based on the user's request. Analyzes the request and recommends the appropriate flow, including any necessary loops.",
+      "mode": "all",
+      "prompt": "{file:./agent-prompts/consultant.agent.md}",
+      "permission": {
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow"
+      }
+    },
+    "digester": {
+      "description": "Analyze the codebase and update agent instructions to match changes, ensuring agents have accurate, up-to-date context for better performance and accuracy.",
+      "mode": "all",
+      "prompt": "{file:./agent-prompts/digester.agent.md}",
+      "permission": {
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow",
+
+        "edit": "allow",
+        "write": "allow",
+        "apply_patch": "allow"
+      }
+    }
+  },
+  "snapshot": false,
+  "instructions": [
+    "~/.config/kilo/rules/kilo-instructions.md",
+    "./kilo/rules/instructions.md"
+  ],
+  "skills": {
+    "paths": [
+      "~/.claude/skills",
+      "~/.claude/skills/"
+    ]
+  }
+}
