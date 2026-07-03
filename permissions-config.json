@@ -1,0 +1,105 @@
+{
+  "locations": {
+    "/Users/selwyn.leeke/Documents/DEV/Sandbox/flashcards": {
+      "tool_approvals": [
+        {
+          "kind": "write"
+        },
+        {
+          "kind": "commands",
+          "commandIdentifiers": [
+            "mkdir"
+          ]
+        },
+        {
+          "kind": "commands",
+          "commandIdentifiers": [
+            "npm run"
+          ]
+        },
+        {
+          "kind": "commands",
+          "commandIdentifiers": [
+            "npm install"
+          ]
+        },
+        {
+          "kind": "commands",
+          "commandIdentifiers": [
+            "git add"
+          ]
+        },
+        {
+          "kind": "commands",
+          "commandIdentifiers": [
+            "npm test"
+          ]
+        },
+        {
+          "kind": "commands",
+          "commandIdentifiers": [
+            "npx tsc"
+          ]
+        },
+        {
+          "kind": "commands",
+          "commandIdentifiers": [
+            "printf"
+          ]
+        },
+        {
+          "kind": "memory"
+        }
+      ]
+    },
+    "/Users/selwyn.leeke/Documents/DEV/booze-tracker": {
+      "tool_approvals": [
+        {
+          "kind": "commands",
+          "commandIdentifiers": [
+            "mkdir"
+          ]
+        },
+        {
+          "kind": "write"
+        },
+        {
+          "kind": "commands",
+          "commandIdentifiers": [
+            "npx jest"
+          ]
+        },
+        {
+          "kind": "commands",
+          "commandIdentifiers": [
+            "npm run"
+          ]
+        },
+        {
+          "kind": "commands",
+          "commandIdentifiers": [
+            "npm test"
+          ]
+        },
+        {
+          "kind": "commands",
+          "commandIdentifiers": [
+            "wait"
+          ]
+        },
+        {
+          "kind": "commands",
+          "commandIdentifiers": [
+            "npx tsc"
+          ]
+        },
+        {
+          "kind": "commands",
+          "commandIdentifiers": [
+            "npx playwright"
+          ]
+        }
+      ]
+    }
+  }
+}

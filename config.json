@@ -1,0 +1,102 @@
+// User settings belong in settings.json.
+// This file is managed automatically.
+{
+  "installedPlugins": [
+    {
+      "name": "superpowers",
+      "marketplace": "superpowers-marketplace",
+      "version": "5.0.7",
+      "installed_at": "2026-04-29T04:07:20.346Z",
+      "enabled": true,
+      "cache_path": "/Users/selwyn.leeke/.copilot/installed-plugins/superpowers-marketplace/superpowers"
+    }
+  ],
+  "firstLaunchAt": "2026-03-11T00:00:00.000Z",
+  "lastLoggedInUser": {
+    "host": "https://github.com",
+    "login": "sleeke"
+  },
+  "loggedInUsers": [
+    {
+      "host": "https://github.com",
+      "login": "sleeke"
+    }
+  ],
+  "expAssignmentsCache": {
+    "v1:dc6fd5318dee45df160df4f982e700f6dc7d36e4e7bb53ed8428680e93401414": {
+      "schemaVersion": 1,
+      "retrievedAt": "2026-07-03T04:57:43.422Z",
+      "response": {
+        "Features": [
+          "cli_aa_c",
+          "h7c07110",
+          "e974i579",
+          "h0649438",
+          "gpt-default",
+          "916bj795",
+          "i810g980",
+          "ibdi6602",
+          "cjf2j356",
+          "7f4g8540",
+          "122j5628",
+          "40003418",
+          "405c7929",
+          "ci93f471",
+          "cli_aa_monitor_t",
+          "anthropic_tool_search_enabled",
+          "h600b851"
+        ],
+        "Flights": {
+          "9dd4c115-7dcb-c453-d2b5-339c74a1ded6": "cli_aa_c",
+          "c845d17b-3348-6a8b-6435-e4352da2f268": "h7c07110",
+          "cdbba11c-53d2-d2f3-6039-88f91f7dbd10": "e974i579",
+          "36115216-e8ea-0eb0-d3a5-0919cf86df38": "h0649438",
+          "5d699f9a-3230-7187-2b5b-71ee26021ada": "gpt-default",
+          "669112f0-f4bd-5e96-1833-64af0a3822ef": "916bj795",
+          "10146615-ae8f-4853-6838-078ac94b4a14": "i810g980",
+          "2033b9f3-b9e1-6d25-898e-5f14c616a72b": "ibdi6602",
+          "117598bf-6eec-9b69-3ebb-8db6bc949bcf": "cjf2j356",
+          "6941fe83-83fe-f2a0-0128-4c4a5cdc393f": "7f4g8540",
+          "d5402b0a-d2cf-5fe2-d6a8-4111560c4366": "122j5628",
+          "f7039b47-82c2-7db1-cecf-6848b0d2c143": "40003418",
+          "9a31b9c3-0000-2d68-6830-e7f7b34a7a31": "405c7929",
+          "6e9fbe8f-80fd-3b34-bdaa-0aacca62d1fd": "ci93f471",
+          "535e4d56-d57b-cbea-68e4-6ed90f421902": "cli_aa_monitor_t",
+          "5486e3fa-057c-98a8-08b5-60cc78100391": "anthropic_tool_search_enabled",
+          "1e91e67f-d7b1-7059-d2fa-9efb221c8002": "h600b851"
+        },
+        "Configs": [
+          {
+            "Id": "default",
+            "Parameters": {
+              "copilot_cli": true,
+              "copilot_cli_anthropic_messages_api": true,
+              "copilot_cli_gh_cli_over_mcp": true,
+              "copilot_cli_gpt_5_4_for_subagents": true,
+              "copilot_cli_gpt_5_4_mini_for_explore": true,
+              "copilot_cli_gpt_default_model": true,
+              "copilot_cli_mcp_allowlist": true,
+              "copilot_cli_mcp_enterprise_allowlist": true,
+              "copilot_cli_number": -39,
+              "copilot_cli_opus_medium_effort_default": true,
+              "copilot_cli_remove_cwd_listing": true,
+              "copilot_cli_remove_parallel_tool_prompt": true,
+              "copilot_cli_rubber_duck_gpt_claude": true,
+              "copilot_cli_shell_error_classification": true,
+              "copilot_cli_string": "c_string",
+              "copilot_cli_subagent_parallelism_prompts": true,
+              "copilot_cli_targeted_validation_prompt": true,
+              "copilot_cli_tool_search_anthropic": true
+            }
+          }
+        ],
+        "ParameterGroups": null,
+        "FlightingVersion": 2661,
+        "ImpressionId": "A8ACBC5089F247619EADCAF2F443F6D1",
+        "AssignmentContext": "cli_aa_c:1136621;h7c07110:1176015;e974i579:1132406;h0649438:1154840;gpt-default:1141887;916bj795:1153107;i810g980:1183187;ibdi6602:1183171;cjf2j356:1160400;7f4g8540:1183174;122j5628:1178748;40003418:1197442;405c7929:1196236;ci93f471:1193270;cli_aa_monitor_t:1169029;anthropic_tool_search_enabled:1215160;h600b851:1222569;"
+      }
+    }
+  },
+  "appTipShown": true,
+  "reasoningSummariesCleanupDone": true
+}

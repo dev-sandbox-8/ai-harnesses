@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "hooks": {
+    "agentStop": [
+      {
+        "type": "command",
+        "bash": "osascript -e 'do shell script \"afplay /System/Library/Sounds/Funk.aiff &> /dev/null &\"' -e 'display dialog \"Agent stopped.\" with title \"Hook-generated message\" buttons {\"OK\"} default button \"OK\"'",
+        "timeoutSec": 5
+      }
+    ],
+    "sessionEnd": [
+      {
+        "type": "command",
+        "bash": "osascript -e 'do shell script \"afplay /System/Library/Sounds/Funk.aiff &> /dev/null &\"' -e 'display dialog \"Session ended.\" with title \"Hook-generated message\" buttons {\"OK\"} default button \"OK\"'",
+        "timeoutSec": 5
+      }
+    ],
+    "notification": [
+      { 
+        "matcher": ".*",
+        "type": "command",
+        "bash": "say \"Copilot is notifying.\" &> /dev/null &",
+        "timeoutSec": 5
+      }
+    ],
+    "permissionRequest": [
+      {
+        "matcher": ".*",
+        "type": "command",
+        "bash": "say \"Copilot needs permission to use a tool.\" &> /dev/null &",
+        "timeoutSec": 5
+      }
+    ]
+  }
+}
