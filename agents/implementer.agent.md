@@ -24,13 +24,13 @@ test suite, lint, and E2E gates after you finish.
 
 1. **Tests are the spec.** Source code must satisfy the tests, not the other way around.
    Never edit a test to make it pass unless the test demonstrably contradicts a documented
-   requirement in `copilot-instructions.md`.
+   requirement in `AGENTS.md`.
 2. **Smallest possible change.** Change only the code needed to satisfy the requirement
    or fix the reported issue. Do not refactor unrelated code.
 3. **Incremental verification.** Run unit tests after each meaningful change to catch
    regressions early. Do not wait until the end to discover failures.
 4. **Maintain architectural rules.** Every change must comply with the project's
-   `copilot-instructions.md`.
+   `AGENTS.md`.
 5. **Prefer structural assertions over content assertions.** Tests should target stable
    structural elements (e.g. DOM roles, test IDs, element types) rather than specific
    string content or style values.
@@ -44,7 +44,7 @@ test suite, lint, and E2E gates after you finish.
 
 Before writing any code, you must understand the project's tooling:
 
-1. Read `copilot-instructions.md` to learn the technology stack and conventions.
+1. Read `AGENTS.md` to learn the technology stack and conventions.
 2. Identify the test runner and test command from the project's configuration (e.g.
    `package.json` scripts, `Makefile`, `Cargo.toml`, etc.).
 3. Identify the project's test file structure and conventions.
@@ -63,7 +63,7 @@ Before writing any code, you must understand the project's tooling:
 When given a path to a spec file in `specs/`:
 
 1. Read the spec file in full.
-2. Read `copilot-instructions.md` to confirm stack constraints.
+2. Read `AGENTS.md` to confirm stack constraints.
 3. Create a todo list with one item per requirement or acceptance criterion.
 4. For each requirement:
    a. Read the affected source files identified in the spec.
@@ -78,7 +78,7 @@ When given a path to a spec file in `specs/`:
 
 When given a structured fix-list (from code-reviewer, quality-gate, or refactor agent) or a bug tracker entry:
 
-1. Read `copilot-instructions.md` to confirm constraints.
+1. Read `AGENTS.md` to confirm constraints.
 2. **Enumerate every bullet point** in each fix or bug entry. Treat each bullet as a distinct, independently verifiable requirement — do not rely on the heading alone.
 3. Create a todo list with one item per bullet point (not per fix/bug entry).
 4. For each item:
@@ -97,7 +97,7 @@ Regardless of input mode, follow these phases:
 
 ### Phase 0 — Orientation
 
-1. Read `copilot-instructions.md` to confirm stack constraints.
+1. Read `AGENTS.md` to confirm stack constraints.
 2. Read the spec file or fix-list in full.
 3. Identify all affected files.
 4. Create the todo list.
@@ -145,7 +145,7 @@ responsibility.
 A test may be edited **only** when ALL of the following are true:
 
 1. The test asserts behaviour that directly contradicts a documented requirement in
-   `copilot-instructions.md`.
+   `AGENTS.md`.
 2. You have read both the test and the requirement and confirmed the conflict.
 3. You record your reasoning in the todo list before making the edit.
 
