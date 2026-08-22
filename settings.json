@@ -1,8 +1,8 @@
 {
   "env": {
     "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "45",
-    "ANTHROPIC_BASE_URL": "http://localhost:1234",
-    "ANTHROPIC_AUTH_TOKEN": "lmstudio",
+    "ANTHROPIC_BASE_URL": "http://127.0.0.1:8080",
+    "ANTHROPIC_AUTH_TOKEN": "sk-claude-475291be8e54",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
     "API_TIMEOUT_MS": "1800000",
     "BASH_DEFAULT_TIMEOUT_MS": "1800000",
@@ -12,7 +12,7 @@
     "CLAUDE_ENABLE_BYTE_WATCHDOG": "0",
     "CLAUDE_STREAM_IDLE_TIMEOUT_MS": "1800000"
   },
-  "model": "qwen3.5-4b",
+  "model": "free-high",
   "hooks": {
     "Stop": [
       {
@@ -57,17 +57,6 @@
           }
         ]
       }
-    ],
-    "PostToolUseFailure": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "afplay ~/.claude/Sounds/Basso.aiff; say -v Stephanie 'Claude failed to use a tool.'; ~/.claude/scripts/discord-notify.sh 'I failed to use a tool.'"
-          }
-        ]
-      }
     ]
   },
   "statusLine": {
@@ -76,8 +65,8 @@
   },
   "enabledPlugins": {
     "vercel@claude-plugins-official": true,
-    "discord@claude-plugins-official": true,
-    "telegram@claude-plugins-official": true
+    "skill-creator@claude-plugins-official": true,
+    "playwright@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
@@ -88,10 +77,10 @@
     }
   },
   "effortLevel": "medium",
+  "skipWorkflowUsageWarning": true,
   "theme": "auto",
   "api": {
     "timeoutMs": 1800000
   },
-  "autoCheckPointCommits": false,
-  "skipWorkflowUsageWarning": true
+  "autoCheckPointCommits": false
 }

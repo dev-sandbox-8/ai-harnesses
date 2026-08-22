@@ -1,0 +1,1 @@
+Please summarize progress so far to continue later, including what's been completed, what's been tried, and what's left to do. Output the result to `agent-output/chat-summary.md`

@@ -2,10 +2,6 @@
 
 ### High Priority
 
-#### agents don't seem to run the playwright tests
-- When I run a task using implementer, it seems to create playwright tests, but leaves so many issues, it can't actually be running them
-- When I run the quality gate, it will pass if the playwright tests don't build
-
 #### Ensure that the current set of agents is compatible with Claude CLI
 - Run full orchestrator workflows based on discrete issues, repeating as needed until the result is clean and complete.
 - Identify and fix any issues with agent interactions, tool usage, or output formatting.
@@ -26,6 +22,18 @@
 - **Test case 2**: Introduce a known bug and check that the bug-fix agent can identify and resolve it, updating the bug tracker accordingly.
 - **Test case 3**: Use the code-reviewer agent to review a pull request and ensure that it provides actionable feedback based on the defined architecture rules and instructions.
 
-#### Implement a basic bug tracker
-- Create a `plan/BUG_TRACKER.md` file to log identified bugs, their status, and any relevant details.
-- Integrate bug tracking into the orchestrator workflow, so that any issues identified during execution are automatically logged.
+### Minor agent edits
+- All agents should provide a clear and concise summary of their actions and outputs, including any errors or issues encountered during execution and next steps which need the user's attention.
+- Add aility to pick up more local information about the project, such as the current state of the codebase, recent changes, and any relevant documentation or specifications. This can help agents make more informed decisions and provide more accurate outputs.
+  - Examples of issues which shouldnn't happen:
+    - "The src directory doesn't exist! This is likely the root cause. Let me check what's in the .next folder or if there's any build output:"
+    - "Let me check if the app is expected to be run directly as a Next.js app (with pages in the .next/build/app):"
+
+### Minimize agent cycles
+- How can I change the agents to need fewer turns in order to complete a task? This is important because it can help reduce the overall time and resources required to complete a task, as well as improve the efficiency and effectiveness of the agents. 
+
+### Specs should link to bug tracking system
+- Spec files should 
+  - reference the original bug file
+  - Include a section for priority, complexity, etc. to help with triaging and planning
+- Implementer should update specs files and their associated bug/feat files and move them to the archive when the work is complete, so that the spec files remain up-to-date and relevant.
