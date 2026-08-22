@@ -1,0 +1,335 @@
+#!/usr/bin/env node
+'use strict';
+
+/**
+ * harness-translate
+ * Convert a VS Code Copilot skill/agent file to Claude Code format, or vice versa.
+ *
+ * Usage:
+ *   harness-translate --from <copilot|claude> --to <copilot|claude> <file>
+ */
+
+const fs = require('fs');
+const path = require('path');
+const readline = require('readline');
+
+// ---------------------------------------------------------------------------
+// Resource loading
+// ---------------------------------------------------------------------------
+
+const SCRIPT_DIR = path.dirname(fs.realpathSync(process.argv[1]));
+const RESOURCES_DIR = path.join(SCRIPT_DIR, 'harness-translate-resources');
+
+function loadMappings() {
+  const mapPath = path.join(RESOURCES_DIR, 'tool-mappings.json');
+  try {
+    return JSON.parse(fs.readFileSync(mapPath, 'utf8'));
+  } catch (e) {
+    console.error(`Error: could not load ${mapPath}\n  ${e.message}`);
+    process.exit(1);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// CLI argument parsing
+// ---------------------------------------------------------------------------
+
+function printUsage() {
+  console.error(
+    'harness-translate — convert skills/agents between VS Code Copilot and Claude Code\n\n' +
+    'Usage:\n' +
+    '  harness-translate --from <copilot|claude> --to <copilot|claude> <file>\n\n' +
+    'Options:\n' +
+    '  --from   Source platform: copilot or claude\n' +
+    '  --to     Target platform: copilot or claude\n' +
+    '  --help   Show this message\n\n' +
+    'The converted file is written to the appropriate target directory:\n' +
+    '  --to copilot  →  ~/.copilot/agents/<name>  or  ~/.copilot/skills/<name>/\n' +
+    '  --to claude   →  ~/.claude/agents/<name>   or  ~/.claude/skills/<name>/'
+  );
+  process.exit(1);
+}
+
+function parseArgs(argv) {
+  const args = argv.slice(2);
+
+  if (args.includes('--help') || args.includes('-h')) printUsage();
+
+  let from, to, file;
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === '--from' && i + 1 < args.length)      { from = args[++i]; }
+    else if (args[i] === '--to' && i + 1 < args.length)   { to   = args[++i]; }
+    else if (!args[i].startsWith('-'))                     { file = args[i];   }
+  }
+
+  if (!from || !to || !file) printUsage();
+
+  const valid = ['copilot', 'claude'];
+  if (!valid.includes(from) || !valid.includes(to)) {
+    console.error('Error: --from and --to must each be "copilot" or "claude"');
+    process.exit(1);
+  }
+  if (from === to) {
+    console.error('Error: --from and --to must be different platforms');
+    process.exit(1);
+  }
+
+  return { from, to, file: path.resolve(file) };
+}
+
+// ---------------------------------------------------------------------------
+// Front matter parsing
+// ---------------------------------------------------------------------------
+
+/**
+ * Split a file's content into its raw YAML front matter and body.
+ * Returns null if no valid front matter block is found.
+ */
+function splitFrontMatter(content) {
+  const match = content.match(/^---[ \t]*\r?\n([\s\S]*?)\r?\n---[ \t]*\r?\n?([\s\S]*)$/);
+  if (!match) return null;
+  return { raw: match[1], body: match[2] };
+}
+
+// ---------------------------------------------------------------------------
+// Tools field handling
+// ---------------------------------------------------------------------------
+
+/**
+ * Locate the `tools: [...]` block in a front matter string.
+ * Returns { start, end, inner } where start/end are indices into `raw`
+ * (end is exclusive) and inner is the content between the brackets.
+ */
+function findToolsBlock(raw) {
+  const keyMatch = raw.match(/^tools:\s*\[/m);
+  if (!keyMatch) return null;
+
+  const bracketStart = keyMatch.index + keyMatch[0].length - 1;
+  let depth = 0;
+  let bracketEnd = -1;
+
+  for (let i = bracketStart; i < raw.length; i++) {
+    if (raw[i] === '[')      depth++;
+    else if (raw[i] === ']') { depth--; if (depth === 0) { bracketEnd = i; break; } }
+  }
+
+  if (bracketEnd === -1) return null;
+
+  return {
+    start: keyMatch.index,
+    end:   bracketEnd + 1,
+    inner: raw.slice(bracketStart + 1, bracketEnd),
+  };
+}
+
+/**
+ * Extract individual tool names from the content inside the tools array.
+ * Handles: single-quoted, double-quoted, unquoted, namespaced (foo/bar), ## comments.
+ */
+function extractToolNames(inner) {
+  const noComments = inner.replace(/##[^\n]*/g, '');
+  const tools = [];
+  const re = /'([^']*)'|"([^"]*)"|([a-zA-Z][a-zA-Z0-9_/.-]*)/g;
+  let m;
+  while ((m = re.exec(noComments)) !== null) {
+    const name = m[1] ?? m[2] ?? m[3] ?? '';
+    if (name) tools.push(name);
+  }
+  return [...new Set(tools)];
+}
+
+function mapToolsCopilotToClaud(tools, mappings) {
+  const result = new Set();
+  for (const tool of tools) {
+    const mapped = tool.includes('/')
+      ? mappings.copilotNamespaceToClaud[tool.split('/')[0]] ?? []
+      : mappings.copilotGroupToClaud[tool] ?? [];
+    mapped.forEach(t => result.add(t));
+  }
+  return [...result];
+}
+
+function mapToolsClaudeToCopilot(tools, mappings) {
+  const result = new Set();
+  for (const tool of tools) {
+    const group = mappings.claudToCopilotGroup[tool];
+    if (group) result.add(group);
+  }
+  return [...result];
+}
+
+function transformToolsField(raw, from, to, mappings) {
+  const block = findToolsBlock(raw);
+  if (!block) return raw;
+
+  const tools  = extractToolNames(block.inner);
+  const mapped = from === 'copilot'
+    ? mapToolsCopilotToClaud(tools, mappings)
+    : mapToolsClaudeToCopilot(tools, mappings);
+
+  const replacement = `tools: [${mapped.map(t => `'${t}'`).join(', ')}]`;
+  return raw.slice(0, block.start) + replacement + raw.slice(block.end);
+}
+
+// ---------------------------------------------------------------------------
+// YAML field utilities
+// ---------------------------------------------------------------------------
+
+function escapeRegex(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/** Remove a YAML key and its value (including indented continuation lines). */
+function removeYAMLKey(raw, key) {
+  return raw.replace(
+    new RegExp(`^${escapeRegex(key)}:[^\\n]*(\\n[ \\t]+[^\\n]*)*`, 'm'),
+    ''
+  );
+}
+
+/** Append a simple scalar YAML field at the end of the front matter string. */
+function addYAMLField(raw, key, value) {
+  return raw.trimEnd() + `\n${key}: ${value}`;
+}
+
+// ---------------------------------------------------------------------------
+// File-type detection and output-path resolution
+// ---------------------------------------------------------------------------
+
+function detectFileType(filePath, rawFM) {
+  const normalised = filePath.replace(/\\/g, '/');
+  const base = path.basename(filePath);
+
+  if (normalised.includes('/agents/') || /\.agent\.(md|yaml)$/.test(base)) return 'agent';
+  if (normalised.includes('/skills/') || base === 'SKILL.md')               return 'skill';
+  if (/(?:^|\n)invocation\s*:/m.test(rawFM))                                return 'skill';
+  if (/(?:^|\n)tools\s*:/m.test(rawFM))                                     return 'agent';
+  return 'unknown';
+}
+
+function getOutputPath(sourceFile, to, fileType) {
+  const home = process.env.HOME || process.env.USERPROFILE;
+  if (!home) {
+    console.error('Error: cannot determine home directory ($HOME is not set)');
+    process.exit(1);
+  }
+
+  const targetBase = to === 'claude'
+    ? path.join(home, '.claude')
+    : path.join(home, '.copilot');
+
+  const base = path.basename(sourceFile);
+
+  if (fileType === 'agent') return path.join(targetBase, 'agents', base);
+  if (fileType === 'skill') {
+    const skillDir = path.basename(path.dirname(sourceFile));
+    return path.join(targetBase, 'skills', skillDir, base);
+  }
+  return path.join(targetBase, base);
+}
+
+// ---------------------------------------------------------------------------
+// Front matter and body transformation
+// ---------------------------------------------------------------------------
+
+function transformFrontMatter(raw, from, to, fileType, mappings) {
+  let result = transformToolsField(raw, from, to, mappings);
+
+  if (fileType === 'skill') {
+    if (from === 'copilot' && to === 'claude') {
+      result = removeYAMLKey(result, 'argument-hint');
+      if (!/(?:^|\n)invocation\s*:/m.test(result)) {
+        result = addYAMLField(result, 'invocation', 'manual');
+      }
+    } else if (from === 'claude' && to === 'copilot') {
+      result = removeYAMLKey(result, 'invocation');
+    }
+  }
+
+  return result.replace(/\n{3,}/g, '\n\n').trim();
+}
+
+function transformBody(body, from, to, mappings) {
+  const map = from === 'copilot'
+    ? (mappings.bodyTextCopilotToClaud  ?? {})
+    : (mappings.bodyTextClaudToCopilot ?? {});
+
+  let result = body;
+  for (const [src, dst] of Object.entries(map)) {
+    const srcEsc = escapeRegex(src);
+    // backtick code spans: `Foo`
+    result = result.replace(new RegExp('`' + srcEsc + '`', 'g'), '`' + dst + '`');
+    // prose pattern: "the Foo tool"
+    result = result.replace(
+      new RegExp('\\bthe\\s+' + srcEsc + '\\s+tool\\b', 'g'),
+      'the ' + dst + ' tool'
+    );
+  }
+  return result;
+}
+
+// ---------------------------------------------------------------------------
+// Overwrite prompt
+// ---------------------------------------------------------------------------
+
+async function promptOverwrite(filePath) {
+  if (!process.stdin.isTTY) return false;
+  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+  return new Promise(resolve => {
+    rl.question(`Output already exists: ${filePath}\nOverwrite? [y/N] `, answer => {
+      rl.close();
+      resolve(/^y(es)?$/i.test(answer.trim()));
+    });
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Entry point
+// ---------------------------------------------------------------------------
+
+async function main() {
+  const { from, to, file } = parseArgs(process.argv);
+  const mappings = loadMappings();
+
+  if (!fs.existsSync(file)) {
+    console.error(`Error: file not found: ${file}`);
+    process.exit(1);
+  }
+
+  const content = fs.readFileSync(file, 'utf8');
+  const parts   = splitFrontMatter(content);
+
+  if (!parts) {
+    console.error('Error: no YAML front matter found — expected --- delimiters at the start of the file');
+    process.exit(1);
+  }
+
+  const { raw, body } = parts;
+  const fileType = detectFileType(file, raw);
+
+  const newFM   = transformFrontMatter(raw, from, to, fileType, mappings);
+  const newBody = transformBody(body, from, to, mappings);
+  const output  = `---\n${newFM}\n---\n${newBody}`;
+
+  const outPath = getOutputPath(file, to, fileType);
+
+  if (fs.existsSync(outPath)) {
+    const ok = await promptOverwrite(outPath);
+    if (!ok) {
+      console.log('Aborted — output not written.');
+      process.exit(0);
+    }
+  }
+
+  fs.mkdirSync(path.dirname(outPath), { recursive: true });
+  fs.writeFileSync(outPath, output, 'utf8');
+
+  console.log(`Converted: ${from} → ${to}${fileType !== 'unknown' ? ` (${fileType})` : ''}`);
+  console.log(`  Source : ${file}`);
+  console.log(`  Output : ${outPath}`);
+}
+
+main().catch(err => {
+  console.error(`Fatal: ${err.message}`);
+  process.exit(1);
+});
