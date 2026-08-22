@@ -50,20 +50,28 @@ Every command used must leave the working tree and refs untouched. Safe commands
 `diff`, `merge-base`, `log`, `show`, `blame`, `shortlog`, `branch`, `read-only file reads`.
 
 Never run: `checkout`, `reset`, `restore`, `clean`, `rebase`, `cherry-pick`, `stash`,
-`apply`, `merge`, or anything else that moves refs or edits files.
+`apply`, `merge`, or anything else that moves refs or edits files. Writing one scratch
+file to hold the diff text is allowed — it touches no refs or tracked files; remove it
+when done.
+
+**Capture once, then read.** Don't make repeated git calls throughout the session. Run
+one command up front that dumps the whole diff (stat summary first) to a scratch file,
+then work exclusively from that file with Read/Grep:
+
+```bash
+{ git diff --stat <range>; echo; git diff <range>; } | tee .diff-walkthrough.txt
+```
 
 When answering questions you may read other repo files (tests, callers, config) to give
 accurate context — still read-only.
-
-For large diffs, prefer summarising per-file stats first (`git diff --stat`) rather than
-dumping everything into context at once.
 
 ## Procedure
 
 ### Phase 1 — Acquire the Diff
 
 1. Resolve the input to a concrete ref range or file path. If ambiguous, ask the user.
-2. Run the appropriate non-destructive command(s).
+2. Capture the diff to one scratch file (stat + full diff) per **Capture once, then read**
+   above, then Read that file. All later analysis works from the file, not from git.
 3. Note the scope: files changed, insertions/deletions, refs compared.
 4. If nothing changed in the range, say so plainly and stop.
 
