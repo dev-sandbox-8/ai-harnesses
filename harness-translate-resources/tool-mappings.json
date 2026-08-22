@@ -1,0 +1,65 @@
+{
+  "_comment": "Tool name mappings between VS Code Copilot and Claude Code agent formats.",
+
+  "copilotGroupToClaud": {
+    "read":    ["Read"],
+    "edit":    ["Edit", "Write"],
+    "search":  ["Search", "Glob", "Grep"],
+    "execute": ["Bash"],
+    "agent":   ["Agent", "SendMessage"],
+    "todo":    ["TodoWrite"],
+    "vscode":  []
+  },
+
+  "copilotNamespaceToClaud": {
+    "read":    ["Read"],
+    "edit":    ["Edit", "Write"],
+    "search":  ["Search", "Glob", "Grep"],
+    "execute": ["Bash"],
+    "todo":    ["TodoWrite"],
+    "vscode":  []
+  },
+
+  "claudToCopilotGroup": {
+    "Read":       "read",
+    "Write":      "edit",
+    "Edit":       "edit",
+    "Search":     "search",
+    "Glob":       "search",
+    "Grep":       "search",
+    "Bash":       "execute",
+    "Agent":      "agent",
+    "SendMessage":"agent",
+    "TodoWrite":  "todo",
+    "WebFetch":   "read",
+    "TaskCreate": "agent",
+    "TaskList":   "agent",
+    "TaskUpdate": "agent",
+    "TaskGet":    "agent",
+    "TaskStop":   "agent"
+  },
+
+  "bodyTextCopilotToClaud": {
+    "readFile":      "Read",
+    "createFile":    "Write",
+    "textSearch":    "Grep",
+    "fileSearch":    "Glob",
+    "codebase":      "Search",
+    "runInTerminal": "Bash",
+    "awaitTerminal": "Bash",
+    "webFetch":      "WebFetch"
+  },
+
+  "bodyTextClaudToCopilot": {
+    "Read":       "readFile",
+    "Write":      "createFile",
+    "Grep":       "textSearch",
+    "Glob":       "fileSearch",
+    "Search":     "codebase",
+    "Bash":       "runInTerminal",
+    "Edit":       "edit",
+    "Agent":      "agent",
+    "TodoWrite":  "todo",
+    "WebFetch":   "webFetch"
+  }
+}
