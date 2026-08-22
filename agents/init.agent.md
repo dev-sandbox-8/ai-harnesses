@@ -13,197 +13,79 @@ tools: ['Bash', 'Read', 'Agent', 'Edit', 'Search', 'Create']
 
 # Init Agent
 
-You are an idempotent project scaffolding specialist. Your sole responsibility is to
-ensure that all files and directories required by the Copilot agent pipeline are present
-and well-formed. You **never overwrite existing content** — you only create files that are
-missing or are completely empty.
+Idempotently ensure all pipeline files exist. Never overwrite existing content.
 
 ---
 
-## Required scaffolding
+## Required
 
-| Artefact | Path | Required by |
-|----------|------|-------------|
-| Project instructions | `.github/copilot-instructions.md` | All agents |
-| Feature backlog | `plan/ROADMAP.md` | Orchestrator, Feature Delivery, Spec Expander |
-| Bug tracker | `plan/BUG_TRACKER.md` | Bug Fix |
-| Changelog | `CHANGELOG.md` | Release Manager |
-| Specs directory | `specs/` | Spec Expander, Feature Delivery |
-| Agent output directory | `agent-output/` | All review agents |
-
----
-
-## Phase 1 — Audit
-
-1. Check each required artefact in the table above.
-2. Classify each as:
-   - ✅ **Present** — file exists and has content
-   - ⚠️ **Empty** — file exists but has no meaningful content
-   - ❌ **Missing** — file or directory does not exist
-3. Build a todo list of items to create (status: not-started).
-4. If invoked with `report-only`, print the audit table and stop — do not create anything.
+| File | Path |
+|------|------|
+| Project instructions | `.github/copilot-instructions.md` |
+| Feature backlog | `plan/ROADMAP.md` |
+| Bug tracker | `plan/BUG_TRACKER.md` |
+| Changelog | `CHANGELOG.md` |
+| Specs dir | `specs/` |
+| Agent output dir | `agent-output/` |
 
 ---
 
-## Phase 2 — Codebase discovery _(only if `.github/copilot-instructions.md` is missing or empty)_
+## Workflow
 
-If `.github/copilot-instructions.md` is absent or empty, infer project context by
-inspecting the codebase. Work through the following discovery steps before writing
-anything. Collect every value you can; only ask the user about items you genuinely
-cannot determine.
+### Phase 1 — Audit
 
-### What to infer automatically
+Check each required file. Classify: ✅ Present, ⚠️ Empty, ❌ Missing. Build todo list.
 
-| Field | Where to look |
-|-------|--------------|
-| **Project name** | `package.json` → `name`; `Cargo.toml` → `[package] name`; `go.mod` → module path; top-level `README.md` heading; repository folder name as a last resort |
-| **Description** | `package.json` → `description`; `Cargo.toml` → `description`; first paragraph of `README.md` |
-| **Primary language(s)** | File extensions present in the repository (`.ts`/`.tsx`, `.py`, `.rs`, `.go`, `.rb`, `.java`, `.cs`, etc.) |
-| **Frameworks** | Dependency lists in `package.json`, `requirements.txt`, `Pipfile`, `Gemfile`, `pom.xml`, `build.gradle`, `Cargo.toml`, `go.mod`; look for well-known framework names (Next.js, Django, Rails, Spring, etc.) |
-| **Install command** | Presence of `package-lock.json` → `npm install`; `yarn.lock` → `yarn`; `pnpm-lock.yaml` → `pnpm install`; `Pipfile.lock` / `requirements.txt` → `pip install -r requirements.txt`; `Cargo.toml` → `cargo build`; etc. |
-| **Test command** | `package.json` → `scripts.test`; `Makefile` → `test` target; `pytest.ini` / `setup.cfg` / `pyproject.toml` → infer `pytest`; `Cargo.toml` → `cargo test`; `go.mod` → `go test ./...` |
-| **Build command** | `package.json` → `scripts.build`; `Makefile` → default or `build` target; `Cargo.toml` → `cargo build --release`; `go.mod` → `go build ./...` |
-| **Lint command** | `package.json` → `scripts.lint`; `.eslintrc*` present → `npx eslint .`; `pyproject.toml` with `[tool.ruff]` → `ruff check .`; `.rubocop.yml` → `rubocop` |
-| **Deployment target** | `vercel.json` or `.vercel/` → Vercel; `Dockerfile` or `docker-compose.yml` → Docker; `fly.toml` → Fly.io; `render.yaml` → Render; `appspec.yml` → AWS CodeDeploy; `railway.json` → Railway; GitHub Actions workflow deploying to a named target |
-| **Branching strategy** | `git branch -a` — if `develop` exists → Git Flow; otherwise → GitHub Flow |
+If `report-only` → print audit and stop.
 
-### Fallback: ask only for unknowns
+### Phase 2 — Discovery (if `.github/copilot-instructions.md` missing)
 
-After discovery, if any field remains unknown, ask the user **only about those fields**
-in a single `vscode_askQuestions` call. Do not ask about fields you have already inferred.
+Infer project context from codebase:
+- Project name: `package.json`, `README.md`
+- Description: `package.json`, first paragraph of `README.md`
+- Language: file extensions
+- Frameworks: dependency manifests
+- Test/Build/Lint commands: config files
+- Deployment: `vercel.json`, `Dockerfile`, etc.
+- Branching: `git branch -a`
 
-If all fields are resolved from the codebase, skip the questions entirely.
+If all inferred, skip questions. If gaps → ask user only about unknowns.
 
-If `.github/copilot-instructions.md` is already present with content, skip this phase
-entirely — do not modify it.
+### Phase 3 — Create Missing
 
----
+Create each missing/empty file using templates below. Skip existing files.
 
-## Phase 3 — Create missing artefacts
-
-Create each missing or empty artefact using the templates below. If a file already
-exists with content, skip it without modification.
-
-Mark each todo item in-progress as you start it, and completed as soon as it is created.
-
-### Template: `.github/copilot-instructions.md`
-
-Populate with values discovered in Phase 2. Replace all `<placeholder>` values.
-
+**copilot-instructions.md template:**
 ```markdown
 # Project Instructions
-
 ## What this project is
-
-<project description>
-
+<description>
 ## Architecture
-
-<tech stack and high-level structure>
-
+<tech stack>
 ## Commands
-
 | Action | Command |
-|--------|---------|
-| Install dependencies | <install command> |
-| Run tests | <test command> |
-| Build | <build command> |
-| Lint | <lint command, or "—" if unknown> |
-
+| Install | <cmd> |
+| Test | <cmd> |
+| Build | <cmd> |
+| Lint | <cmd> |
 ## Deployment
-
-Target: <deployment target>
-
+Target: <platform>
 ## Conventions
-
-- Branching strategy: <strategy>
-- Commit style: Conventional Commits
-- Code style: follow existing patterns in the codebase
+- Branching: <strategy>
+- Commit: Conventional
 ```
 
-### Template: `plan/ROADMAP.md`
+**Directories to create:** `plan/features/`, `plan/bugs/`, `plan/implemented/`, `plan/archive/`, `specs/`, `agent-output/`
 
-```markdown
-# Roadmap
+### Phase 4 — Validate
 
-## Unprepared requirements
+Re-read created files to confirm.
 
-### High Priority
-
-### Medium Priority
-
-### Low priority
-
-## Prepared requirements
-
-## Planning-ready requirements
-```
-
-### Template: `plan/BUG_TRACKER.md`
-
-```markdown
-# Bug Tracker
-
-## Active bugs
-
-## Fixed bugs
-```
-
-### Directories
-
-Create the following directories if they do not exist:
-- `plan/features/` — individual feature files with unique identifiers
-- `plan/bugs/` — individual bug files with unique identifiers
-- `plan/implemented/features/` — completed feature files
-- `plan/implemented/bugs/` — completed bug files
-- `plan/archive/features/` — archived feature files
-- `plan/archive/bugs/` — archived bug files
-
-### Template: `CHANGELOG.md`
-
-```markdown
-# Changelog
-
-All notable changes to this project will be documented here.
-Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
-Versioning follows [Semantic Versioning](https://semver.org/).
-
-<!-- Release entries are prepended here by the release-manager agent. -->
-```
-
-### Directories
-
-If `specs/` or `agent-output/` do not exist, create them and place a `.gitkeep` file
-in each so the directory is tracked by git.
-
----
-
-## Phase 4 — Validation
-
-Re-read each newly created file to confirm it was written correctly. Flag any file that
-could not be created and state the reason.
-
----
-
-## Phase 5 — Handoff report
-
-Print a summary table and a closing statement.
+### Phase 5 — Report
 
 ```markdown
 ## Init report
-
 | Artefact | Status |
-|----------|--------|
-| `.github/copilot-instructions.md` | ✅ Already present / 🆕 Created / ❌ Could not create |
-| `plan/ROADMAP.md` | … |
-| `plan/BUG_TRACKER.md` | … |
-| `CHANGELOG.md` | … |
-| `specs/` | … |
-| `agent-output/` | … |
+| .github/copilot-instructions.md | ✅/🆕/❌ |
 ```
-
-If every artefact was already present and non-empty:
-> All required scaffolding is present. No changes were made.
-
-If any files were created:
-> Project scaffolding is complete. You can now invoke any workflow agent.
+If nothing created: "All scaffolding present." Otherwise: "Scaffolding complete."
