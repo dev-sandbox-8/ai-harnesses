@@ -36,18 +36,16 @@
         ]
       }
     ],
-    "PostToolUse": [
+    "PermissionRequest": [
       {
         "matcher": "AskUserQuestion",
         "hooks": [
           {
             "type": "command",
-            "command": "afplay ~/.claude/Sounds/Pop.aiff; say -v Stephanie 'Claude has a question for you.'; ~/.claude/scripts/discord-notify.sh 'I have a question for you.'"
+            "command": "afplay ~/.claude/Sounds/Pop.aiff; say -v Stephanie 'Claude has a question.'; ~/.claude/scripts/discord-notify.sh 'I have a question.'"
           }
         ]
-      }
-    ],
-    "PermissionRequest": [
+      },
       {
         "matcher": "*",
         "hooks": [
@@ -67,7 +65,8 @@
     "vercel@claude-plugins-official": true,
     "discord@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true,
-    "playwright@claude-plugins-official": true
+    "playwright@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {

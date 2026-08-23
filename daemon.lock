@@ -1,0 +1,16 @@
+{
+  "pid": 40207,
+  "version": "2.1.212",
+  "jsonPath": "/Users/selwyn.leeke/.claude/daemon.json",
+  "logPath": "/Users/selwyn.leeke/.claude/daemon.log",
+  "startedAt": 1784305647494,
+  "origin": "transient",
+  "spawnedBy": {
+    "label": "claude",
+    "cwd": "/Users/selwyn.leeke/Documents/DEV/booze-tracker",
+    "pid": 21827
+  },
+  "procStart": "Fri Jul 17 16:27:25 2026",
+  "launchTarget": "/Users/selwyn.leeke/.local/share/claude/versions/2.1.212",
+  "processWrapper": ""
+}
