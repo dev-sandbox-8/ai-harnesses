@@ -24,3 +24,6 @@ sessions/
 shell-snapshots/
 tasks
 teams
+
+# VS Code workspace lock files (machine‑specific, may contain tokens)
+ide/
