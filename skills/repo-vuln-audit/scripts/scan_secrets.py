@@ -16,17 +16,15 @@ Usage:
 """
 import os
 import re
+import shutil
+import subprocess
 import sys
 import json
 import math
 
-# Directories we never descend into.
-SKIP_DIRS = {
-    ".git", "node_modules", "dist", "build", ".next", ".nuxt",
-    "venv", ".venv", "env", "__pycache__", ".tox", ".cache",
-    "vendor", "target", ".terraform", "coverage", ".idea", ".vscode",
-    "bower_components", "Pods", ".gradle",
-}
+# Runtime-populated from .gitignore; never hardcode a skip list here
+# because anything not in .gitignore could be pushed to the remote.
+SKIP_DIRS: set = set()
 
 # File suffixes we treat as binary / non-scannable.
 SKIP_EXT = {
@@ -192,9 +190,42 @@ def scan_file(path: str, rel: str, findings: list):
                 })
 
 
+def _load_gitignore_dirs(root: str) -> set:
+    """Return directory names at *root* that are excluded by .gitignore.
+
+    Uses `git ls-files --others --exclude-standard --directory`, which
+    lists every untracked path respecting the repo's .gitignore rules.
+    Lines that end with '/' are directories; we collect their basenames
+    and return them as a set.
+
+    Returns an empty set if `git` is not on PATH, the path is not a
+    repo, or the command fails for any reason.
+    """
+    if not shutil.which("git"):
+        return set()
+    try:
+        result = subprocess.run(
+            ["git", "-C", root, "ls-files",
+             "--others", "--exclude-standard", "--directory"],
+            capture_output=True, text=True, check=True, timeout=10,
+        )
+    except (subprocess.CalledProcessError, subprocess.TimeoutExpired, OSError):
+        return set()
+    ignored = set()
+    for line in result.stdout.splitlines():
+        if line.endswith("/"):
+            ignored.add(line.rstrip("/").rsplit("/", 1)[-1])
+    ignored.discard(".git")
+    return ignored
+
+
 def scan_repo(root: str):
     findings = []
     root = os.path.abspath(root)
+    # The skip set comes exclusively from .gitignore so we only exclude
+    # directories the repo owner has explicitly marked as off-limits.
+    # Anything not in .gitignore could be pushed; we scan it.
+    SKIP_DIRS = _load_gitignore_dirs(root)
     for dirpath, dirnames, filenames in os.walk(root):
         # Prune skipped directories in place.
         dirnames[:] = [d for d in dirnames if d not in SKIP_DIRS]
