@@ -1,0 +1,6 @@
+{
+  "eval_id": 2,
+  "eval_name": "git-merge-conflict",
+  "prompt": "I just had my first git merge conflict and my teammate helped me resolve it, but I don't really understand WHY it happened, what the different resolution options are, or what would have happened if I'd chosen differently. Can you explain merge conflicts to me?",
+  "assertions": []
+}

@@ -1,0 +1,26 @@
+{
+  "skill_name": "learning-session",
+  "evals": [
+    {
+      "id": 0,
+      "eval_name": "javascript-closures",
+      "prompt": "Explain JavaScript closures to me. I've been coding for about 6 months and I keep hearing this term, but when I read about it I get confused. I know what functions and variables are, but that's about it. Please help me really understand this.",
+      "expected_output": "A teaching session that incrementally builds understanding of closures, starting from the user's current knowledge, using a checklist, confirming understanding at each stage, and quizzing before moving on.",
+      "files": ["evals/files/closure_example.js"]
+    },
+    {
+      "id": 1,
+      "eval_name": "rate-limiting-design",
+      "prompt": "I'm a backend engineer and I just joined a team that uses token-bucket rate limiting. I understand the basic idea — don't let users hit the API too many times — but I don't understand WHY we chose token bucket over other approaches, what edge cases we handle, or how it connects to our broader system. Can you walk me through this properly?",
+      "expected_output": "A structured teaching session covering the problem of rate limiting, why token bucket was chosen, design decisions, edge cases, and broader system impact, with incremental verification.",
+      "files": ["evals/files/rate_limiter.py"]
+    },
+    {
+      "id": 2,
+      "eval_name": "git-merge-conflict",
+      "prompt": "I just had my first git merge conflict and my teammate helped me resolve it, but I don't really understand WHY it happened, what the different resolution options are, or what would have happened if I'd chosen differently. Can you explain merge conflicts to me?",
+      "expected_output": "A teaching session that explains merge conflicts incrementally: why they occur, the branching model that causes them, resolution strategies, design of git's conflict markers, edge cases, and broader workflow impact.",
+      "files": []
+    }
+  ]
+}

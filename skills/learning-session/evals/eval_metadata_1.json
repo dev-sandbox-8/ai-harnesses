@@ -1,0 +1,6 @@
+{
+  "eval_id": 1,
+  "eval_name": "rate-limiting-design",
+  "prompt": "I'm a backend engineer and I just joined a team that uses token-bucket rate limiting. I understand the basic idea — don't let users hit the API too many times — but I don't understand WHY we chose token bucket over other approaches, what edge cases we handle, or how it connects to our broader system. Can you walk me through this properly?",
+  "assertions": []
+}
